@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CaloFit | Sağlıklı Kilo Alma & Kişisel Beslenme Portalı</title>
+  <meta name="description" content="Adaçayı yeşili & krem tonlarında tasarlanmış, sağlıklı kilo almak ve kalori takibi yapmak için modern dijital sağlık portalı.">
+  
+  <!-- Font Integration -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Navigation & Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-logo">
+        <div class="logo-icon logo-icon-premium">
+          <i class="fa-solid fa-apple-whole"></i>
+          <span class="logo-crown-badge"><i class="fa-solid fa-crown"></i></span>
+        </div>
+        <div class="logo-text">
+          <span class="brand-name">Calo<span class="badge-pro"><i class="fa-solid fa-bolt"></i> FIT</span></span>
+          <span class="brand-tagline">Sağlıklı Kilo Alma & Fit Beslenme Portalı</span>
+        </div>
+      </div>
+
+      <div class="quick-status-bar">
+        <div class="status-chip">
+          <i class="fa-solid fa-fire text-amber"></i>
+          <div>
+            <span class="chip-label">Hedef Kalori</span>
+            <span class="chip-value" id="hdr-target-calories">2,850 kcal</span>
+          </div>
+        </div>
+        <div class="status-chip">
+          <i class="fa-solid fa-utensils text-emerald"></i>
+          <div>
+            <span class="chip-label">Bugün Alınan</span>
+            <span class="chip-value" id="hdr-consumed-calories">0 kcal</span>
+          </div>
+        </div>
+        <div class="status-chip">
+          <i class="fa-solid fa-droplet text-cyan"></i>
+          <div>
+            <span class="chip-label">Su (Hatırlatıcı 🔔)</span>
+            <span class="chip-value" id="hdr-water-status">0.75 / 3.5 L</span>
+          </div>
+        </div>
+        <div class="status-chip">
+          <i class="fa-solid fa-weight-scale text-cyan"></i>
+          <div>
+            <span class="chip-label">Kilo / Hedef</span>
+            <span class="chip-value" id="hdr-weight-status">64.0 kg / 72.0 kg</span>
+          </div>
+        </div>
+
+        <button id="theme-toggle-btn" class="theme-toggle-btn" onclick="app.toggleTheme()" title="Açık / Koyu Tema Değiştir">
+          <i class="fa-solid fa-moon" id="theme-toggle-icon"></i>
+          <span id="theme-toggle-label">Koyu</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <nav class="app-nav">
+      <button class="nav-tab active" data-target="sec-dashboard">
+        <i class="fa-solid fa-chart-pie"></i> Kontrol Paneli
+      </button>
+      <button class="nav-tab" data-target="sec-calculator">
+        <i class="fa-solid fa-calculator"></i> Kalori & Makro Hesaplayıcı
+      </button>
+      <button class="nav-tab" data-target="sec-meal-options">
+        <i class="fa-solid fa-utensils"></i> Öğün Seçenekleri & Menüler
+      </button>
+      <button class="nav-tab" data-target="sec-shake-lab">
+        <i class="fa-solid fa-blender text-amber"></i> Smoothie & Shake Lab
+      </button>
+      <button class="nav-tab" data-target="sec-daily-exercise">
+        <i class="fa-solid fa-person-running"></i> Günlük Egzersiz
+      </button>
+      <button class="nav-tab" data-target="sec-progress">
+        <i class="fa-solid fa-chart-line"></i> Kilo & Ölçü Takibi
+      </button>
+    </nav>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-content">
+
+    <!-- SECTION 1: DASHBOARD -->
+    <section id="sec-dashboard" class="content-section active">
+      <!-- Hero Banner -->
+      <div class="hero-banner">
+        <div class="hero-text">
+          <span class="hero-badge"><i class="fa-solid fa-bolt"></i> Temiz Kilo Alma (Clean Bulking) Devrede</span>
+          <h1>Sağlıklı ve Kalıcı Kilo Alın!</h1>
+          <p>Yüksek besin değerine sahip kaloriler, dengeli makro dağılımı ve kas kütlesini artıran antrenman planıyla kilo alma yolculuğunuzu bilimsel olarak yönetin.</p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" onclick="app.switchTab('sec-calculator')">
+              <i class="fa-solid fa-sliders"></i> Hedeflerimi Hesapla
+            </button>
+            <button class="btn btn-glass" onclick="app.switchTab('sec-shake-lab')">
+              <i class="fa-solid fa-blender"></i> Calorie-Bomb Shake Yap
+            </button>
+          </div>
+        </div>
+        <div class="hero-image-wrap">
+          <img src="assets/hero.jpg" alt="Sade ve Minimalist Sağlıklı Beslenme Görseli" class="hero-img">
+        </div>
+      </div>
+
+      <!-- Overview Cards & Calorie Rings -->
+      <div class="dashboard-grid">
+
+        <!-- Main Calorie & Macro Card -->
+        <div class="glass-card macro-overview-card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-bullseye text-emerald"></i> Günlük Kalori & Makro İlerlemesi</h3>
+            <span class="date-badge" id="current-date-str">29 Temmuz 2026</span>
+          </div>
+
+          <div class="calorie-progress-wrapper">
+            <div class="ring-container">
+              <svg class="ring-svg" viewBox="0 0 160 160">
+                <circle class="ring-bg" cx="80" cy="80" r="70"></circle>
+                <circle class="ring-bar" id="calorie-ring-bar" cx="80" cy="80" r="70" stroke-dasharray="440" stroke-dashoffset="440"></circle>
+              </svg>
+              <div class="ring-text">
+                <span class="ring-val" id="dash-remaining-calories">2850</span>
+                <span class="ring-sub">Kalan Kalori</span>
+                <small class="ring-total" id="dash-total-target">Hedef: 2850 kcal</small>
+              </div>
+            </div>
+
+            <!-- Macros Bars -->
+            <div class="macro-bars-list">
+              <div class="macro-item">
+                <div class="macro-meta">
+                  <span class="macro-name"><i class="fa-solid fa-drumstick-bite text-amber"></i> Protein</span>
+                  <span class="macro-vals"><strong id="val-protein-curr">0</strong> / <span id="val-protein-tgt">140</span>g</span>
+                </div>
+                <div class="progress-bar-bg">
+                  <div class="progress-bar-fill fill-amber" id="bar-protein" style="width: 0%"></div>
+                </div>
+              </div>
+
+              <div class="macro-item">
+                <div class="macro-meta">
+                  <span class="macro-name"><i class="fa-solid fa-bowl-rice text-emerald"></i> Karbonhidrat</span>
+                  <span class="macro-vals"><strong id="val-carbs-curr">0</strong> / <span id="val-carbs-tgt">360</span>g</span>
+                </div>
+                <div class="progress-bar-bg">
+                  <div class="progress-bar-fill fill-emerald" id="bar-carbs" style="width: 0%"></div>
+                </div>
+              </div>
+
+              <div class="macro-item">
+                <div class="macro-meta">
+                  <span class="macro-name"><i class="fa-solid fa-avocado text-cyan"></i> Sağlıklı Yağlar</span>
+                  <span class="macro-vals"><strong id="val-fat-curr">0</strong> / <span id="val-fat-tgt">95</span>g</span>
+                </div>
+                <div class="progress-bar-bg">
+                  <div class="progress-bar-fill fill-cyan" id="bar-fat" style="width: 0%"></div>
+                </div>
+              </div>
+
+              <!-- Hydration Tracker -->
+              <div class="hydration-widget">
+                <div class="hydration-info">
+                  <span><i class="fa-solid fa-glass-water text-cyan"></i> Günlük Su İhtiyacı</span>
+                  <strong id="water-log-text">0.0 / 3.5 Litre (0 Bardak)</strong>
+                </div>
+                <div class="hydration-btns">
+                  <button class="btn btn-sm btn-outline-cyan" onclick="app.addWater(0.25)">
+                    <i class="fa-solid fa-plus"></i> +250 ml Bardak
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" onclick="app.resetWater()">
+                    <i class="fa-solid fa-rotate-left"></i> Sıfırla
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Log & Preset Foods -->
+        <div class="glass-card food-logger-card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-plus-circle text-amber"></i> Öğün & Gıda Ekle</h3>
+            <button class="btn btn-sm btn-secondary" onclick="app.clearTodayLogs()">
+              <i class="fa-solid fa-trash"></i> Günlüğü Temizle
+            </button>
+          </div>
+
+          <form id="food-log-form" class="custom-food-form">
+            <div class="form-row">
+              <div class="form-group flex-2">
+                <label for="food-name">Besin / Öğün Adı</label>
+                <input type="text" id="food-name" placeholder="Örn: Yulaflı Fıstık Ezmeli Shake" required>
+              </div>
+              <div class="form-group flex-1">
+                <label for="food-meal">Öğün</label>
+                <select id="food-meal">
+                  <option value="Kahvaltı">Kahvaltı</option>
+                  <option value="Öğle Yemeği">Öğle Yemeği</option>
+                  <option value="Akşam Yemeği">Akşam Yemeği</option>
+                  <option value="Ara Öğün / Shake" selected>Ara Öğün / Shake</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="food-calories">Kalori (kcal)</label>
+                <input type="number" id="food-calories" min="0" placeholder="650" required>
+              </div>
+              <div class="form-group">
+                <label for="food-protein">Protein (g)</label>
+                <input type="number" id="food-protein" min="0" placeholder="25">
+              </div>
+              <div class="form-group">
+                <label for="food-carbs">Karb (g)</label>
+                <input type="number" id="food-carbs" min="0" placeholder="80">
+              </div>
+              <div class="form-group">
+                <label for="food-fat">Yağ (g)</label>
+                <input type="number" id="food-fat" min="0" placeholder="22">
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-amber btn-block">
+              <i class="fa-solid fa-check"></i> Öğünü Kaydet
+            </button>
+          </form>
+
+          <!-- High Calorie Quick Preset Buttons -->
+          <div class="preset-foods-section">
+            <h4><i class="fa-solid fa-bolt text-amber"></i> Hızlı Kilo Aldırıcı Besinler (+Tek Tıkla Ekle)</h4>
+            <div class="preset-chips">
+              <button class="chip-btn" onclick="app.addPresetFood('1 Porsiyon Yulaf + Fıstık Ezmesi + Muz', 620, 22, 85, 20)">
+                🥣 Yulaf Shake (620 kcal)
+              </button>
+              <button class="chip-btn" onclick="app.addPresetFood('1 Avuç Çiğ Badem & Ceviz (50g)', 330, 9, 10, 30)">
+                🥜 Karışık Çerez (330 kcal)
+              </button>
+              <button class="chip-btn" onclick="app.addPresetFood('Zeytinyağlı Pirinç Pilavı & Tavuk Göğsü', 680, 48, 75, 18)">
+                🍗 Tavuk & Pilav (680 kcal)
+              </button>
+              <button class="chip-btn" onclick="app.addPresetFood('Tam Avokado & Tam Buğday Ekmeği', 380, 7, 30, 26)">
+                🥑 Avokado Tost (380 kcal)
+              </button>
+              <button class="chip-btn" onclick="app.addPresetFood('2 Yemek Kaşığı Doğal Fıstık Ezmesi (32g)', 190, 8, 7, 16)">
+                🍯 Fıstık Ezmesi (190 kcal)
+              </button>
+              <button class="chip-btn" onclick="app.addPresetFood('Tam Yağlı Süzme Yoğurt + Bal + Ceviz', 350, 16, 32, 16)">
+                🥣 Bal-Yoğurt-Ceviz (350 kcal)
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Standalone Water Reminder & Hydration Glass Card -->
+      <div class="glass-card water-reminder-card full-width-card mt-4">
+        <div class="card-header">
+          <div>
+            <h3><i class="fa-solid fa-droplet text-cyan fa-bounce"></i> Günlük Akıllı Su Takip & İçme Hatırlatıcısı</h3>
+            <p class="text-sm text-muted">Vücut sağlığı, sindirim ve kas gelişimi için günlük su hedefinize düzenli hatırlatmalarla ulaşın.</p>
+          </div>
+          
+          <div class="water-alarm-toggle-wrap">
+            <button id="water-reminder-toggle-btn" class="btn btn-sm btn-emerald" onclick="app.toggleWaterReminder()">
+              <i class="fa-solid fa-bell"></i> Hatırlatıcı: Açık (🔔)
+            </button>
+          </div>
+        </div>
+
+        <div class="water-widget-grid">
+          <!-- Hydro Fill Gauge Column -->
+          <div class="hydro-visual-box">
+            <div class="water-cylinder-wrap">
+              <div class="water-cylinder-fill" id="water-cylinder-fill" style="height: 25%;"></div>
+              <div class="water-cylinder-overlay">
+                <span class="water-pct-num" id="water-pct-num">%25</span>
+                <i class="fa-solid fa-droplet text-cyan"></i>
+              </div>
+            </div>
+            <div class="hydro-text-meta">
+              <span class="h-label">Mevcut Su Tüketimi</span>
+              <strong id="water-log-text-main" class="text-cyan">0.75 / 3.5 Litre</strong>
+              <small id="water-glasses-count" class="text-muted">(3 Bardak İçildi)</small>
+            </div>
+          </div>
+
+          <!-- Reminder Controls & Timer Column -->
+          <div class="water-timer-controls">
+            <div class="timer-display-box">
+              <div class="timer-info">
+                <span class="t-title"><i class="fa-solid fa-clock-rotate-left text-amber"></i> Bir Sonraki Su Uyarısına Kalan Süre</span>
+                <strong class="t-countdown text-cyan" id="water-countdown-str">45:00</strong>
+              </div>
+              <button class="btn btn-sm btn-outline-cyan" onclick="app.testWaterReminderAlert()">
+                <i class="fa-solid fa-bell"></i> Sına (Test Et)
+              </button>
+            </div>
+
+            <div class="form-row mt-3">
+              <div class="form-group flex-1">
+                <label for="water-interval-select"><i class="fa-solid fa-sliders text-cyan"></i> Hatırlatma Sıklığı</label>
+                <select id="water-interval-select" class="form-control-sm" onchange="app.setWaterReminderInterval(this.value)">
+                  <option value="30">Her 30 Dakikada Bir</option>
+                  <option value="45" selected>Her 45 Dakikada Bir (Önerilen)</option>
+                  <option value="60">Her 60 Dakikada Bir (1 Saat)</option>
+                  <option value="90">Her 90 Dakikada Bir (1.5 Saat)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Quick Log Buttons Grid -->
+            <div class="water-quick-btns">
+              <button class="btn btn-sm btn-outline-cyan" onclick="app.addWater(0.25)">
+                <i class="fa-solid fa-plus"></i> +250 ml (Bardak)
+              </button>
+              <button class="btn btn-sm btn-outline-cyan" onclick="app.addWater(0.50)">
+                <i class="fa-solid fa-plus"></i> +500 ml (Şişe)
+              </button>
+              <button class="btn btn-sm btn-outline-cyan" onclick="app.addWater(0.75)">
+                <i class="fa-solid fa-plus"></i> +750 ml (Matara)
+              </button>
+              <button class="btn btn-sm btn-outline-danger" onclick="app.resetWater()">
+                <i class="fa-solid fa-rotate-left"></i> Sıfırla
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Daily Mood, Appetite & Energy Card -->
+      <div class="glass-card mood-tracker-card full-width-card mt-4">
+        <div class="card-header">
+          <div>
+            <h3><i class="fa-solid fa-face-smile text-amber"></i> Günlük Mod, İştah & Enerji Takibi</h3>
+            <p class="text-sm text-muted">Sağlıklı kilo alımı için gün içerisindeki zihinsel modunuzu, iştah durumunuzu ve kişisel notlarınızı kaydedin.</p>
+          </div>
+        </div>
+
+        <div class="mood-widget-grid">
+          <div class="mood-selectors">
+            <div class="form-group flex-1">
+              <label><i class="fa-solid fa-utensils text-emerald"></i> İştah Seviyesi</label>
+              <div class="mood-btn-group" id="appetite-btn-group">
+                <button type="button" class="mood-chip active" data-val="Yüksek" onclick="app.setAppetite('Yüksek', this)">😋 Harika / Yüksek</button>
+                <button type="button" class="mood-chip" data-val="Orta" onclick="app.setAppetite('Orta', this)">🙂 Normal / Orta</button>
+                <button type="button" class="mood-chip" data-val="Düşük" onclick="app.setAppetite('Düşük', this)">🤐 Az / Kapalı</button>
+              </div>
+            </div>
+
+            <div class="form-group flex-1">
+              <label><i class="fa-solid fa-bolt text-amber"></i> Enerji Seviyesi</label>
+              <div class="mood-btn-group" id="energy-btn-group">
+                <button type="button" class="mood-chip active" data-val="Yüksek" onclick="app.setEnergy('Yüksek', this)">⚡ Enerjik & Canlı</button>
+                <button type="button" class="mood-chip" data-val="Orta" onclick="app.setEnergy('Orta', this)">⚖️ Dengeli</button>
+                <button type="button" class="mood-chip" data-val="Yorgun" onclick="app.setEnergy('Yorgun', this)">😴 Yorgun / Halsiz</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="daily-note-box mt-3">
+            <label for="daily-user-note"><i class="fa-solid fa-pen-to-square text-cyan"></i> Bugünkü Notunuz & Günlük Güncesi</label>
+            <div class="note-input-row">
+              <input type="text" id="daily-user-note" class="form-control" placeholder="Örn: Bugün 4 öğün rahat yedim, su hedefime ulaştım..." onchange="app.saveDailyNote(this.value)">
+              <button class="btn btn-sm btn-emerald" onclick="app.saveDailyNote(document.getElementById('daily-user-note').value)">
+                <i class="fa-solid fa-floppy-disk"></i> Kaydet
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Logged Meals List -->
+      <div class="glass-card full-width-card mt-4">
+        <div class="card-header">
+          <h3><i class="fa-solid fa-list-check text-cyan"></i> Bugünkü Yemek Günlüğü</h3>
+          <span class="badge-count" id="logged-count">0 Yemek</span>
+        </div>
+        <div class="logged-meals-container">
+          <div class="table-responsive">
+            <table class="meals-table">
+              <thead>
+                <tr>
+                  <th>Öğün</th>
+                  <th>Besin / Açıklama</th>
+                  <th>Kalori</th>
+                  <th>Protein</th>
+                  <th>Karbonhidrat</th>
+                  <th>Yağ</th>
+                  <th>İşlem</th>
+                </tr>
+              </thead>
+              <tbody id="meals-tbody">
+                <tr class="empty-row">
+                  <td colspan="7" class="text-center text-muted">
+                    <i class="fa-solid fa-utensils fa-2x mb-2 d-block"></i>
+                    Henüz bugün için bir yemek eklemediniz. Yukarıdaki hızlı butonları veya formu kullanabilirsiniz!
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- SECTION 2: BMR & SURPLUS CALCULATOR -->
+    <section id="sec-calculator" class="content-section">
+      <div class="section-intro">
+        <h2><i class="fa-solid fa-calculator text-emerald"></i> Bilimsel BMR & Temiz Kilo Alma Hesaplayıcı</h2>
+        <p>Sağlıklı kilo alımı, günlük harcadığınız kaloriden (TDEE) daha fazla kalori tüketmeye (Kalori Fazlası / Surplus) dayanır. Aşağıdaki bilgilerinizi girerek günlük hedefinizi oluşturun.</p>
+      </div>
+
+      <div class="calc-grid">
+        <!-- Input Form -->
+        <div class="glass-card">
+          <h3 class="card-title"><i class="fa-solid fa-user-gear text-amber"></i> Fiziksel Profil & Hedefler</h3>
+          
+          <form id="bmr-form" class="calc-form">
+            <div class="form-row">
+              <div class="form-group flex-1">
+                <label for="calc-gender">Cinsiyet</label>
+                <select id="calc-gender">
+                  <option value="male" selected>Erkek</option>
+                  <option value="female">Kadın</option>
+                </select>
+              </div>
+              <div class="form-group flex-1">
+                <label for="calc-age">Yaş</label>
+                <input type="number" id="calc-age" min="14" max="90" value="24" required>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group flex-1">
+                <label for="calc-height">Boy (cm)</label>
+                <input type="number" id="calc-height" min="120" max="230" value="178" required>
+              </div>
+              <div class="form-group flex-1">
+                <label for="calc-weight">Mevcut Kilo (kg)</label>
+                <input type="number" id="calc-weight" step="0.1" min="30" max="200" value="64.0" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="calc-target-weight">Hedef Kilo (kg)</label>
+              <input type="number" id="calc-target-weight" step="0.1" min="35" max="200" value="72.0" required>
+            </div>
+
+            <div class="form-group">
+              <label for="calc-activity">Haftalık Aktivite Düzeyi</label>
+              <select id="calc-activity">
+                <option value="1.2">Masabaşı / Hareketsiz (Spor yapmıyor)</option>
+                <option value="1.375">Hafif Aktif (Haftada 1-3 gün spor)</option>
+                <option value="1.55" selected>Orta Aktif (Haftada 3-5 gün spor/ağırlık)</option>
+                <option value="1.725">Çok Aktif (Haftada 6-7 gün ağır antrenman)</option>
+                <option value="1.9">Aşırı Aktif (Profesyonel atlet / fiziksel iş)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="calc-surplus-mode">Kilo Alma Hızı (Kalori Fazlası)</label>
+              <select id="calc-surplus-mode">
+                <option value="300">Temiz / Yavaş Bulking (+300 kcal/gün - En Az Yağlanma)</option>
+                <option value="500" selected>İdeal Dengeli Kilo Alma (+500 kcal/gün - Önerilen)</option>
+                <option value="750">Hızlı Kilo Alma (+750 kcal/gün - Çok Zayıf Hardgainers İçin)</option>
+              </select>
+            </div>
+
+            <button type="submit" class="btn btn-emerald btn-block">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> Kalori & Makro Planını Hesapla
+            </button>
+          </form>
+        </div>
+
+        <!-- Result Display -->
+        <div class="glass-card calc-result-card">
+          <h3 class="card-title"><i class="fa-solid fa-chart-column text-cyan"></i> Kişiselleştirilmiş Sonuçlar</h3>
+          
+          <div class="result-highlights">
+            <div class="res-box">
+              <span class="res-label">Bazal Metabolizma (BMR)</span>
+              <span class="res-value text-cyan" id="res-bmr">1,635 kcal</span>
+              <small>Vücudun dinlenirken yaktığı kalori</small>
+            </div>
+
+            <div class="res-box">
+              <span class="res-label">Günlük Harcanan (TDEE)</span>
+              <span class="res-value text-amber" id="res-tdee">2,534 kcal</span>
+              <small>Mevcut kiloyu koruma kalorisi</small>
+            </div>
+
+            <div class="res-box highlight-box">
+              <span class="res-label">🎯 GÜNLÜK HEDEF KALORİ</span>
+              <span class="res-value text-emerald" id="res-target-cal">3,034 kcal</span>
+              <small>Kilo almak için günlük almanız gereken tutar</small>
+            </div>
+          </div>
+
+          <!-- Macro Plan -->
+          <div class="macro-breakdown-box">
+            <h4>Önerilen Günlük Makro Dağılımı</h4>
+            <div class="macro-grid-3">
+              <div class="macro-card-small">
+                <span class="m-title">Protein (2.0g / kg)</span>
+                <span class="m-amount text-amber" id="res-prot">128 g</span>
+                <span class="m-cal" id="res-prot-cal">512 kcal</span>
+              </div>
+              <div class="macro-card-small">
+                <span class="m-title">Karbonhidrat (%50)</span>
+                <span class="m-amount text-emerald" id="res-carb">379 g</span>
+                <span class="m-cal" id="res-carb-cal">1,517 kcal</span>
+              </div>
+              <div class="macro-card-small">
+                <span class="m-title">Sağlıklı Yağlar (%30)</span>
+                <span class="m-amount text-cyan" id="res-fat">101 g</span>
+                <span class="m-cal" id="res-fat-cal">910 kcal</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Timeline estimate -->
+          <div class="timeline-estimate-box">
+            <i class="fa-solid fa-calendar-check text-emerald fa-2x"></i>
+            <div>
+              <strong>Tahmini Süre:</strong>
+              <p id="res-timeline-text">Haftada yaklaşık 0.45 kg alarak 8.0 kg hedefinize <strong>~18 haftada</strong> ulaşmanız öngörülüyor.</p>
+            </div>
+          </div>
+
+          <button class="btn btn-primary btn-block mt-3" onclick="app.applyCalcToTracker()">
+            <i class="fa-solid fa-check-double"></i> Bu Değerleri Günlük Takibe Kaydet ve Uygula
+          </button>
+          <button class="btn btn-amber btn-block mt-2" onclick="app.applyCalcAndShowOptions()">
+            <i class="fa-solid fa-utensils"></i> Hesaplanan Kaloriye Göre Öğün Seçeneklerini İncele
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: MEAL OPTIONS & ALTERNATIVE MENUS -->
+    <section id="sec-meal-options" class="content-section">
+      <div class="section-intro">
+        <h2><i class="fa-solid fa-utensils text-emerald"></i> Zengin Öğün Seçenekleri & Menü Planlayıcı</h2>
+        <p>Kilo alma sürecinde tek bir yemeğe bağımlı kalmayın! Cinsiyet, iştah ve kalori hedefinize uygun alternatif Kahvaltı, Öğle, Akşam ve Ara Öğün seçeneklerinden dilediğinizi seçin ve günlüğünüze tek tıkla aktarın.</p>
+      </div>
+
+      <!-- Custom Daily Meal Combination Package Builder -->
+      <div class="glass-card package-builder-card mb-4">
+        <div class="card-header">
+          <div>
+            <h3><i class="fa-solid fa-cubes text-amber"></i> Kişiselleştirilmiş Günlük Menü Paketi Oluşturucu</h3>
+            <p class="text-sm text-muted">Aşağıdaki öğün alternatiflerinden istediğin kombinasyonu seç ve günlük menünü oluştur.</p>
+          </div>
+          <div class="package-target-badge">
+            <span>Günlük Hedefiniz</span>
+            <strong id="pkg-target-cal-display" class="text-emerald">3,034 kcal</strong>
+          </div>
+        </div>
+
+        <div class="package-slots-grid">
+          <!-- Breakfast Slot -->
+          <div class="pkg-slot-card">
+            <div class="slot-header">
+              <span><i class="fa-solid fa-sun text-amber"></i> Kahvaltı Seçeneği</span>
+              <span class="slot-cal-badge" id="slot-b-cal">0 kcal</span>
+            </div>
+            <select id="select-pkg-breakfast" class="form-control" onchange="app.updatePackageSummary()">
+              <!-- Options populated by JS -->
+            </select>
+            <div class="slot-macros-mini" id="slot-b-macros">-</div>
+          </div>
+
+          <!-- Lunch Slot -->
+          <div class="pkg-slot-card">
+            <div class="slot-header">
+              <span><i class="fa-solid fa-cloud-sun text-emerald"></i> Öğle Yemeği Seçeneği</span>
+              <span class="slot-cal-badge" id="slot-l-cal">0 kcal</span>
+            </div>
+            <select id="select-pkg-lunch" class="form-control" onchange="app.updatePackageSummary()">
+              <!-- Options populated by JS -->
+            </select>
+            <div class="slot-macros-mini" id="slot-l-macros">-</div>
+          </div>
+
+          <!-- Dinner Slot -->
+          <div class="pkg-slot-card">
+            <div class="slot-header">
+              <span><i class="fa-solid fa-moon text-cyan"></i> Akşam Yemeği Seçeneği</span>
+              <span class="slot-cal-badge" id="slot-d-cal">0 kcal</span>
+            </div>
+            <select id="select-pkg-dinner" class="form-control" onchange="app.updatePackageSummary()">
+              <!-- Options populated by JS -->
+            </select>
+            <div class="slot-macros-mini" id="slot-d-macros">-</div>
+          </div>
+
+          <!-- Snack Slot -->
+          <div class="pkg-slot-card">
+            <div class="slot-header">
+              <span><i class="fa-solid fa-cookie-bite text-purple"></i> Ara Öğün & Shake Seçeneği</span>
+              <span class="slot-cal-badge" id="slot-s-cal">0 kcal</span>
+            </div>
+            <select id="select-pkg-snack" class="form-control" onchange="app.updatePackageSummary()">
+              <!-- Options populated by JS -->
+            </select>
+            <div class="slot-macros-mini" id="slot-s-macros">-</div>
+          </div>
+        </div>
+
+        <!-- Package Summary Footer -->
+        <div class="package-summary-footer">
+          <div class="pkg-totals-wrap">
+            <div class="pkg-total-cal-box">
+              <span>Seçilen Paket Toplamı:</span>
+              <strong id="pkg-total-cal" class="text-amber">0 kcal</strong>
+              <small id="pkg-diff-status" class="text-muted">(Hedef: 3,034 kcal)</small>
+            </div>
+            <div class="pkg-macros-breakdown">
+              <span class="macro-badge m-prot">Protein: <strong id="pkg-total-prot">0g</strong></span>
+              <span class="macro-badge m-carb">Karb: <strong id="pkg-total-carb">0g</strong></span>
+              <span class="macro-badge m-fat">Yağ: <strong id="pkg-total-fat">0g</strong></span>
+            </div>
+          </div>
+
+          <div class="pkg-actions">
+            <button class="btn btn-outline-cyan" onclick="app.randomizePackage()">
+              <i class="fa-solid fa-shuffle"></i> Rastgele Menü Seç
+            </button>
+            <button class="btn btn-emerald" onclick="app.logFullPackageToTracker()">
+              <i class="fa-solid fa-calendar-check"></i> Tüm Menüyü Günlüğe Aktar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Controls Toolbar -->
+      <div class="glass-card filter-toolbar mb-4">
+        <div class="toolbar-row">
+          <!-- Category Tabs -->
+          <div class="category-tabs-group" id="meal-category-tabs">
+            <button class="cat-tab active" data-cat="all" onclick="app.setMealCategoryFilter('all', this)">
+              <i class="fa-solid fa-border-all"></i> Tüm Öğünler
+            </button>
+            <button class="cat-tab" data-cat="breakfast" onclick="app.setMealCategoryFilter('breakfast', this)">
+              <i class="fa-solid fa-sun text-amber"></i> Kahvaltı
+            </button>
+            <button class="cat-tab" data-cat="lunch" onclick="app.setMealCategoryFilter('lunch', this)">
+              <i class="fa-solid fa-cloud-sun text-emerald"></i> Öğle Yemeği
+            </button>
+            <button class="cat-tab" data-cat="dinner" onclick="app.setMealCategoryFilter('dinner', this)">
+              <i class="fa-solid fa-moon text-cyan"></i> Akşam Yemeği
+            </button>
+            <button class="cat-tab" data-cat="snack" onclick="app.setMealCategoryFilter('snack', this)">
+              <i class="fa-solid fa-cookie-bite text-purple"></i> Ara Öğün & Shake
+            </button>
+          </div>
+
+          <!-- Search & Filter Dropdown -->
+          <div class="filter-inputs-group">
+            <div class="search-box">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="meal-search-input" placeholder="Yemek veya malzeme ara..." oninput="app.filterMealOptions()">
+            </div>
+
+            <select id="meal-tag-filter" class="form-control-sm" onchange="app.filterMealOptions()">
+              <option value="all">Tüm Diyet Odakları</option>
+              <option value="Yüksek Protein">💪 Yüksek Protein</option>
+              <option value="Hızlı & Pratik">⚡ Hızlı & Pratik</option>
+              <option value="Vejetaryen">🥗 Vejetaryen</option>
+              <option value="Sıvı Kalori">🥣 Sıvı Kalori / Shake</option>
+              <option value="En Popüler">⭐ En Popüler</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Meal Options Display Grid -->
+      <div class="meal-options-grid" id="meal-cards-container">
+        <!-- Rendered dynamically by JS -->
+      </div>
+    </section>
+
+    <!-- SECTION: SMOOTHIE & SHAKE LAB (RECIPE BUILDER) -->
+    <section id="sec-shake-lab" class="content-section">
+      <div class="section-intro">
+        <h2><i class="fa-solid fa-blender text-amber"></i> Smoothie & Shake Tarif Hazırlayıcı</h2>
+        <p>Süt, yulaf, fıstık ezmesi ve meyve gibi malzemelerinizi seçerek kendi yüksek kalorili özel shake tarifinizi oluşturun ve tek tıkla günlük yemek günlüğünüze ekleyin.</p>
+      </div>
+
+      <!-- Custom Interactive Recipe Builder -->
+      <div class="shake-builder-layout">
+        <!-- Ingredients Selection Panel -->
+        <div class="glass-card builder-ingredients-panel">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-vial-circle-check text-emerald"></i> Malzeme Seçim Alanı</h3>
+            <span class="badge-count" id="selected-ingredients-count">0 Malzeme Seçildi</span>
+          </div>
+
+          <div class="ingredients-categories">
+            <!-- Category 1: Liquid Base -->
+            <div class="ing-cat-group">
+              <h5 class="ing-cat-title"><i class="fa-solid fa-glass-water text-cyan"></i> 1. Sıvı Tabanı (250ml)</h5>
+              <div class="ing-chips-grid">
+                <button type="button" class="ing-chip" onclick="app.toggleShakeIngredient('ing_milk_full', 'Tam Yağlı Süt', 150, 8, 12, 8, this)">
+                  <span>Tam Yağlı Süt</span> <small>150 kcal</small>
+                </button>
+                <button type="button" class="ing-chip" onclick="app.toggleShakeIngredient('ing_milk_almond', 'Badem Sütü', 60, 2, 4, 3, this)">
+                  <span>Badem Sütü</span> <small>60 kcal</small>
+                </button>
+                <button type="button" class="ing-chip" onclick="app.toggleShakeIngredient('ing_milk_coco', 'Hindistan C. Sütü', 220, 2, 8, 20, this)">
+                  <span>Hindistan C. Sütü</span> <small>220 kcal</small>
+                </button>
+                <button type="button" class="ing-chip" onclick="app.toggleShakeIngredient('ing_kefir', 'Tam Yağlı Kefir', 160, 9, 11, 9, this)">
+                  <span>Tam Yağlı Kefir</span> <small>160 kcal</small>
+                </button>
+              </div>
+            </div>
+
+            <!-- Category 2: Carbs & Energy Base -->
+            <div class="ing-cat-group mt-3">
+              <h5 class="ing-cat-title"><i class="fa-solid fa-wheat-awn text-amber"></i> 2. Karbonhidrat & Enerji Tabanı</h5>
+              <div class="ing-chips-grid">
+                <button type="button" class="ing-chip" onclick="app.toggleShakeIngredient('ing_oats', 'İnce Yulaf Ezmesi (50g)', 190, 7, 34, 3, this)">
+                  <span>İnce Yulaf Ezmesi (50g)</span> <small>190 kcal</small>
+                </button>
+                <button type="button" class="ing-chip" onclick="app.toggleShakeIngredient('ing_rice_flour', 'Pirinç Unu (40g)', 145, 3, 32, 1, this)">
+                  <span>Pirinç Unu (40g)</span> <small>145 kcal</small>
+                </button>
+                <button type="button" class="ing-chip" onclick="app.toggleShakeIngredient('ing_honey', 'Süzme Bal (20g)', 60, 0, 15, 0, this)">
+                  <span>Süzme Bal (20g)</span> <small>60 kcal</small>
+                </button>
+                <button type="button" class="ing-chip" onclick="app.toggleShakeIngredient('ing_molasses', 'Doğal Pekmez (20g)', 58, 0, 14, 0, this)">
+                  <span>Doğal Pekmez (20g)</span> <small>58 kcal</small>
+                </button>
+              </div>
+            </div>
+
+            <!-- Category 3: Healthy Fats & Butters -->
+            <div class="ing-cat-group mt-3">
+              <h5 class="ing-cat-title"><i class="fa-solid fa-jar text-purple"></i> 3. Ezmeler & Sağlıklı Yağlar</h5>
+              <div class="ing-chips-grid">
+                <button type="button" class="ing-chip" onclick="app.toggleShakeIngredient('ing_pb', 'Fıstık Ezmesi (35g)', 205, 9, 7, 16, this)">
+                  <span>Fıstık Ezmesi (35g)</span> <small>205 kcal</small>
+                </button>
+                <button type="button" class="ing-chip" onclick="app.toggleShakeIngredient('ing_almond_b', 'Badem Ezmesi (30g)', 185, 6, 6, 15, this)">
+                  <span>Badem Ezmesi (30g)</span> <small>185 kcal</small>
+                </button>
+                <button type="button" class="ing-chip" onclick="app.toggleShakeIngredient('ing_avocado', 'Yarım Avokado', 160, 2, 8, 15, this)">
+                  <span>Yarım Avokado</span> <small>160 kcal</small>
+                </button>
+                <button type="button" class="ing-chip" onclick="app.toggleShakeIngredient('ing_tahin', 'Doğal Tahin (20g)', 140, 4, 3, 13, this)">
+                  <span>Doğal Tahin (20g)</span> <small>140 kcal</small>
+                </button>
+                <button type="button" class="ing-chip" onclick="app.toggleShakeIngredient('ing_walnuts', 'Çiğ Ceviz İçi (25g)', 165, 4, 3, 16, this)">
+                  <span>Çiğ Ceviz İçi (25g)</span> <small>165 kcal</small>
+                </button>
+              </div>
+            </div>
+
+            <!-- Category 4: Fruits & Add-ons -->
+            <div class="ing-cat-group mt-3">
+              <h5 class="ing-cat-title"><i class="fa-solid fa-apple-whole text-emerald"></i> 4. Meyveler & Ek Takviyeler</h5>
+              <div class="ing-chips-grid">
+                <button type="button" class="ing-chip" onclick="app.toggleShakeIngredient('ing_banana', 'Olgun Muz (1 adet)', 105, 1, 27, 0, this)">
+                  <span>Olgun Muz (1 adet)</span> <small>105 kcal</small>
+                </button>
+                <button type="button" class="ing-chip" onclick="app.toggleShakeIngredient('ing_strawberry', 'Dondurulmuş Çilek (100g)', 35, 1, 8, 0, this)">
+                  <span>Çilek (100g)</span> <small>35 kcal</small>
+                </button>
+                <button type="button" class="ing-chip" onclick="app.toggleShakeIngredient('ing_dates', 'Hurma (3 adet)', 80, 1, 20, 0, this)">
+                  <span>Hurma (3 adet)</span> <small>80 kcal</small>
+                </button>
+                <button type="button" class="ing-chip" onclick="app.toggleShakeIngredient('ing_whey', 'Whey Protein Tozu (30g)', 120, 24, 2, 1.5, this)">
+                  <span>Whey Protein (30g)</span> <small>120 kcal</small>
+                </button>
+                <button type="button" class="ing-chip" onclick="app.toggleShakeIngredient('ing_chia', 'Chia Tohumu (15g)', 70, 3, 6, 4, this)">
+                  <span>Chia Tohumu (15g)</span> <small>70 kcal</small>
+                </button>
+                <button type="button" class="ing-chip" onclick="app.toggleShakeIngredient('ing_cacao', 'Ham Kakao (15g)', 40, 3, 7, 2, this)">
+                  <span>Ham Kakao (15g)</span> <small>40 kcal</small>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Mixer & Recipe Summary Panel -->
+        <div class="glass-card builder-summary-panel">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-blender text-amber"></i> Canlı Karıştırıcı & Makro Özeti</h3>
+          </div>
+
+          <div class="shake-recipe-name-box mb-3">
+            <label for="custom-shake-name"><i class="fa-solid fa-pen"></i> Shake Adınız</label>
+            <input type="text" id="custom-shake-name" class="form-control" value="Özel Power Shake" placeholder="Shake'inize bir isim verin...">
+          </div>
+
+          <!-- Total Calories Main Badge -->
+          <div class="shake-cal-total-box">
+            <span class="sub-lbl">Tahmini Toplam Enerji</span>
+            <h2 id="shake-total-calories" class="text-amber">0 <small>kcal</small></h2>
+          </div>
+
+          <!-- Macro Gauges Breakdown -->
+          <div class="shake-macro-gauges">
+            <div class="gauge-item g-prot">
+              <span class="g-lbl">Protein</span>
+              <strong id="shake-total-protein">0g</strong>
+            </div>
+            <div class="gauge-item g-carb">
+              <span class="g-lbl">Karbonhidrat</span>
+              <strong id="shake-total-carbs">0g</strong>
+            </div>
+            <div class="gauge-item g-fat">
+              <span class="g-lbl">Yağ</span>
+              <strong id="shake-total-fat">0g</strong>
+            </div>
+          </div>
+
+          <!-- Ingredients List inside Cup -->
+          <div class="shake-cup-contents mt-3">
+            <label><i class="fa-solid fa-cubes text-cyan"></i> Karıştırıcıdaki Malzemeler & Evde Var mı?</label>
+            <ul id="shake-ingredients-list" class="shake-ing-list">
+              <li class="empty-ing-msg text-muted">Henüz malzeme seçilmedi. Sol taraftan malzeme ekleyin.</li>
+            </ul>
+          </div>
+
+          <!-- Recipe Actions -->
+          <div class="shake-actions-row mt-4">
+            <button class="btn btn-emerald btn-block" onclick="app.addCustomShakeToMeals()">
+              <i class="fa-solid fa-circle-plus"></i> Öğünlerime Ekleyin (+kcal)
+            </button>
+            <button class="btn btn-outline-danger btn-block mt-2" onclick="app.clearCustomShakeBuilder()">
+              <i class="fa-solid fa-rotate-left"></i> Temizle
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- EKSİK LİSTE (SHOPPING & MISSING INGREDIENTS LIST CARD) -->
+      <div class="glass-card mt-4 missing-list-card">
+        <div class="card-header">
+          <div>
+            <h3><i class="fa-solid fa-basket-shopping text-amber"></i> Eksik Liste (Alışveriş & Temin Listesi)</h3>
+            <p class="text-sm text-muted">Bugün shake hazırlamak için evde bulunmayan ve satın alınması gereken malzemeleriniz.</p>
+          </div>
+          <span class="badge-count" id="missing-items-count">0 Eksik Malzeme</span>
+        </div>
+
+        <!-- MANUAL CUSTOM MISSING INGREDIENT & NOTE INPUT ROW -->
+        <div class="custom-missing-input-row mt-3 mb-3">
+          <label for="custom-missing-input" class="text-xs text-cyan font-weight-bold mb-1 d-block">
+            <i class="fa-solid fa-pen-to-square"></i> Özel Eksik Malzeme veya Not Ekleyin:
+          </label>
+          <div class="flex gap-2">
+            <input type="text" id="custom-missing-input" class="form-control-sm flex-1" placeholder="Örn: 2 kavanoz fıstık ezmesi, 1 kg muz, süzme bal..." onkeypress="if(event.key==='Enter') { app.addCustomMissingItem(this.value); this.value=''; }">
+            <button type="button" class="btn btn-sm btn-emerald" onclick="const el=document.getElementById('custom-missing-input'); app.addCustomMissingItem(el.value); el.value='';">
+              <i class="fa-solid fa-plus"></i> Listeye Ekle
+            </button>
+          </div>
+        </div>
+
+        <div class="missing-list-body mt-2">
+          <ul id="missing-ingredients-ul" class="missing-ing-ul">
+            <li class="empty-missing-msg text-muted">🎉 Harika! Tüm malzemeleriniz hazır veya henüz malzeme seçilmedi.</li>
+          </ul>
+        </div>
+
+        <div class="missing-actions-row mt-3 flex gap-2">
+          <button class="btn btn-sm btn-outline-cyan" onclick="app.copyMissingListToClipboard()">
+            <i class="fa-solid fa-copy"></i> Listeyi Kopyala (WhatsApp / Notlar)
+          </button>
+          <button class="btn btn-sm btn-outline-danger" onclick="app.clearMissingList()">
+            <i class="fa-solid fa-trash"></i> Eksik Listesini Temizle
+          </button>
+        </div>
+
+        <!-- FIRMA A, B, C SIPARIS YONETIMI WIDGET -->
+        <div class="company-orders-box mt-4">
+          <div class="company-orders-header">
+            <h4><i class="fa-solid fa-truck-fast text-emerald"></i> Firmalardan Eksik Malzeme Sipariş Paneli</h4>
+            <p class="text-xs text-muted">Eksik listenizdeki ürünleri tedarik etmek için Firma A, Firma B veya Firma C seçeneğini belirleyip doğrudan sipariş girebilirsiniz.</p>
+          </div>
+
+          <!-- Company Selection & Order Creator Bar -->
+          <div class="company-select-row mt-3 flex flex-wrap gap-2 items-end">
+            <div class="form-group flex-1" style="min-width: 260px;">
+              <label for="company-select-dropdown" class="text-xs text-cyan font-weight-bold mb-1 d-block">
+                <i class="fa-solid fa-building"></i> Sipariş Verilecek Firmayı Seçin:
+              </label>
+              <select id="company-select-dropdown" class="form-control-sm width-100">
+                <option value="Firma A">Firma A — Taze Manav & Organik Besin Tedarik</option>
+                <option value="Firma B" selected>Firma B — Mega Süpermarket & Hızlı Kurye</option>
+                <option value="Firma C">Firma C — Aktar, Kuruyemiş & Supplement Express</option>
+              </select>
+            </div>
+
+            <button type="button" class="btn btn-sm btn-emerald" onclick="app.submitCompanyOrder()">
+              <i class="fa-solid fa-paper-plane"></i> Seçilen Firmaya Sipariş Gir
+            </button>
+          </div>
+
+          <!-- Active Orders List Table -->
+          <div class="company-orders-list-wrap mt-4">
+            <div class="flex justify-between items-center mb-2">
+              <h5 class="text-sm font-weight-bold"><i class="fa-solid fa-boxes-packing text-amber"></i> Verilen Firma Siparişleri</h5>
+              <span class="badge-count" id="active-orders-count">0 Sipariş</span>
+            </div>
+            <div id="company-orders-container" class="company-orders-grid">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: GÜNLÜK EGZERSİZ & HAREKET TAKİBİ -->
+    <section id="sec-daily-exercise" class="content-section">
+      <div class="section-intro">
+        <h2><i class="fa-solid fa-person-running text-amber"></i> Günlük Egzersiz & Kalori Harcama Takibi</h2>
+        <p>Düzenli egzersiz yapmak metabolizmanızı canlı tutar, iştah mekanizmanızı çalıştırır ve aldığınız kalorilerin kas kütlesine dönüşmesini sağlar.</p>
+      </div>
+
+      <div class="workout-grid">
+        <!-- Live Daily Exercise Calorie Burn Logger -->
+        <div class="glass-card exercise-logger-card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-calculator text-emerald"></i> Günlük Egzersiz Kaydet & Kalori Hesapla</h3>
+            <span class="badge-live">Canlı Hesaplayıcı</span>
+          </div>
+
+          <form id="exercise-log-form" class="calc-form">
+            <div class="form-group">
+              <label for="ex-type-select">Egzersiz / Aktivite Türü</label>
+              <select id="ex-type-select" class="form-control" onchange="app.updateExerciseCalorieEstimate()">
+                <option value="walking" data-met="3.8" selected>🚶 Tempolu Yürüyüş (3.8 MET)</option>
+                <option value="running" data-met="8.0">🏃 Koşu / Jogging (8.0 MET)</option>
+                <option value="calisthenics" data-met="5.0">🤸 Evde Vücut Ağırlığı Egzersizi (Şınav/Mekik/Squat) (5.0 MET)</option>
+                <option value="weightlifting" data-met="6.0">🏋️ Ağırlık & Fitness Antrenmanı (6.0 MET)</option>
+                <option value="cycling" data-met="6.8">🚴 Bisiklet Sürüşü (6.8 MET)</option>
+                <option value="swimming" data-met="7.0">🏊 Yüzme (7.0 MET)</option>
+                <option value="stretching" data-met="2.5">🧘 Esneme / Pilates / Yoga (2.5 MET)</option>
+              </select>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group flex-1">
+                <label for="ex-duration">Süre (Dakika)</label>
+                <input type="number" id="ex-duration" min="5" max="300" value="30" oninput="app.updateExerciseCalorieEstimate()" required>
+              </div>
+              <div class="form-group flex-1">
+                <label>Tahmini Harcanan Kalori</label>
+                <div class="est-cal-box" id="ex-est-cal-box">~165 kcal</div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-amber btn-block mt-3">
+              <i class="fa-solid fa-plus-circle"></i> Egzersizi Bugünkü Takibe Kaydet
+            </button>
+          </form>
+
+          <!-- Today Logged Exercises Summary -->
+          <div class="logged-exercises-box mt-4">
+            <h4><i class="fa-solid fa-list-check text-cyan"></i> Bugünkü Egzersiz Özeti</h4>
+            <div id="today-exercises-list" class="mt-2">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Recommended Daily Exercise Routines -->
+        <div class="glass-card routines-card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-heart-pulse text-cyan"></i> Günlük Önerilen Egzersiz Rutinleri</h3>
+            <span class="badge-count">3 Rutin</span>
+          </div>
+
+          <div class="routine-cards-list">
+            <!-- Routine 1 -->
+            <div class="routine-item-card">
+              <div class="routine-top">
+                <span class="routine-badge bg-amber"><i class="fa-solid fa-sun"></i> Sabah Canlandırıcı (15 Dk)</span>
+                <span class="r-cal text-amber">~90 kcal</span>
+              </div>
+              <h4>Zindelik & İştah Açıcı Sabah Rutini</h4>
+              <p class="text-sm text-muted">Güne canlı başlamak ve sindirim sistemini çalıştırmak için ideal hafif egzersiz seti.</p>
+              <ul class="routine-steps-list">
+                <li><i class="fa-solid fa-check text-emerald"></i> 5 dk Tempolu Yürüyüş / Olduğun Yerde Koşu</li>
+                <li><i class="fa-solid fa-check text-emerald"></i> 3 Set x 15 Vücut Ağırlığı Squat</li>
+                <li><i class="fa-solid fa-check text-emerald"></i> 3 Set x 10 Şınav (Diz Üstü veya Normal)</li>
+                <li><i class="fa-solid fa-check text-emerald"></i> 2 dk Tüm Vücut Esneme</li>
+              </ul>
+              <button class="btn btn-sm btn-outline-cyan mt-2" onclick="app.logQuickRoutine('Sabah Canlandırıcı Rutin (15 Dk)', 15, 90)">
+                <i class="fa-solid fa-check"></i> Bu Rutini Tamamladım Olarak İşaretle
+              </button>
+            </div>
+
+            <!-- Routine 2 -->
+            <div class="routine-item-card mt-3">
+              <div class="routine-top">
+                <span class="routine-badge bg-emerald"><i class="fa-solid fa-dumbbell"></i> Kas Kütlesi Koruma (35 Dk)</span>
+                <span class="r-cal text-emerald">~220 kcal</span>
+              </div>
+              <h4>Ağırlık & Hipertrofi Egzersiz Rutini</h4>
+              <p class="text-sm text-muted">Kilo alırken alınan kalorilerin yağ yerine doğrudan kas kütlesine dönüşmesini sağlayan temel hareketler.</p>
+              <ul class="routine-steps-list">
+                <li><i class="fa-solid fa-check text-emerald"></i> Squat / Leg Press (4 Set x 8-10 Tekrar)</li>
+                <li><i class="fa-solid fa-check text-emerald"></i> Bench Press / Dumbbell Press (4 Set x 8-10)</li>
+                <li><i class="fa-solid fa-check text-emerald"></i> Barbell / Dumbbell Row (4 Set x 8-10)</li>
+                <li><i class="fa-solid fa-check text-emerald"></i> Overhead Press (3 Set x 8)</li>
+              </ul>
+              <button class="btn btn-sm btn-outline-emerald mt-2" onclick="app.logQuickRoutine('Ağırlık & Kas Kütlesi Rutini (35 Dk)', 35, 220)">
+                <i class="fa-solid fa-check"></i> Bu Rutini Tamamladım Olarak İşaretle
+              </button>
+            </div>
+
+            <!-- Routine 3 -->
+            <div class="routine-item-card mt-3">
+              <div class="routine-top">
+                <span class="routine-badge bg-purple"><i class="fa-solid fa-child-reaching"></i> Mobilite & Postür (12 Dk)</span>
+                <span class="r-cal text-purple">~50 kcal</span>
+              </div>
+              <h4>Postür & Omurga Esnetme Rutini</h4>
+              <p class="text-sm text-muted">Masa başında çalışanlar için omurgayı rahatlatan, duruşu düzelten esneme serisi.</p>
+              <ul class="routine-steps-list">
+                <li><i class="fa-solid fa-check text-emerald"></i> Cat-Cow Esnemesi (2 dk)</li>
+                <li><i class="fa-solid fa-check text-emerald"></i> Cobra Stretch & Child's Pose (3 dk)</li>
+                <li><i class="fa-solid fa-check text-emerald"></i> Kalça Açıcı & Hamstring Esneme (4 dk)</li>
+                <li><i class="fa-solid fa-check text-emerald"></i> Derin Diyafram Nefesi (3 dk)</li>
+              </ul>
+              <button class="btn btn-sm btn-outline-cyan mt-2" onclick="app.logQuickRoutine('Postür & Esneme Rutini (12 Dk)', 12, 50)">
+                <i class="fa-solid fa-check"></i> Bu Rutini Tamamladım Olarak İşaretle
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: WEIGHT & MEASUREMENT PROGRESS -->
+    <section id="sec-progress" class="content-section">
+      <div class="section-intro">
+        <h2><i class="fa-solid fa-chart-line text-emerald"></i> Kilo & Vücut Ölçüleri Takip Grafiği</h2>
+        <p>Düzenli tartılarak kilo alma hızınızı (Önerilen: Haftada 0.25 - 0.5 kg) takip edin ve vücut ölçülerinizi kaydedin.</p>
+      </div>
+
+      <div class="progress-grid">
+        <!-- Log Form -->
+        <div class="glass-card">
+          <h3><i class="fa-solid fa-pen-to-square text-amber"></i> Yeni Kilo / Ölçü Kaydı Gir</h3>
+          
+          <form id="progress-log-form" class="calc-form">
+            <div class="form-group">
+              <label for="prog-date">Tarih</label>
+              <input type="date" id="prog-date" required>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group flex-1">
+                <label for="prog-weight">Tartı Kilo (kg)</label>
+                <input type="number" id="prog-weight" step="0.1" placeholder="64.5" required>
+              </div>
+              <div class="form-group flex-1">
+                <label for="prog-arm">Kol Ölçüsü (cm)</label>
+                <input type="number" id="prog-arm" step="0.5" placeholder="33.0">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group flex-1">
+                <label for="prog-chest">Göğüs Ölçüsü (cm)</label>
+                <input type="number" id="prog-chest" step="0.5" placeholder="95.0">
+              </div>
+              <div class="form-group flex-1">
+                <label for="prog-waist">Bel Ölçüsü (cm)</label>
+                <input type="number" id="prog-waist" step="0.5" placeholder="76.0">
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-emerald btn-block">
+              <i class="fa-solid fa-floppy-disk"></i> Kaydı Sisteme Ekle
+            </button>
+          </form>
+
+          <!-- Rate of Gain Feedback Box -->
+          <div class="gain-rate-feedback mt-4" id="gain-rate-feedback-box">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Visual Chart Card -->
+        <div class="glass-card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-chart-area text-cyan"></i> Zaman İçindeki Kilo Değişimi</h3>
+            <button class="btn btn-sm btn-outline-cyan" onclick="app.resetSampleProgress()">
+              <i class="fa-solid fa-rotate-left"></i> Örnek Veri Yükle
+            </button>
+          </div>
+
+          <div class="chart-container">
+            <svg id="weight-chart-svg" class="chart-svg" viewBox="0 0 600 300">
+              <!-- SVG chart elements populated by JS -->
+            </svg>
+          </div>
+
+          <!-- History Table -->
+          <div class="history-table-box mt-3">
+            <h4>Geçmiş Kayıtlar</h4>
+            <div class="table-responsive">
+              <table class="meals-table">
+                <thead>
+                  <tr>
+                    <th>Tarih</th>
+                    <th>Kilo (kg)</th>
+                    <th>Kol (cm)</th>
+                    <th>Göğüs (cm)</th>
+                    <th>Bel (cm)</th>
+                    <th>İşlem</th>
+                  </tr>
+                </thead>
+                <tbody id="progress-tbody">
+                  <!-- Rendered by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Target Weight & Duration Forecaster Card -->
+      <div class="glass-card mt-4 forecaster-card">
+        <div class="card-header">
+          <div>
+            <h3><i class="fa-solid fa-hourglass-half text-amber"></i> Hedef Kilo & Tahmini Ulaşma Süresi Hesabı</h3>
+            <p class="text-sm text-muted">Mevcut tartı geçmişiniz ve kalori fazlanıza göre hedef kiloya ulaşacağınız tahmini tarih ve süre.</p>
+          </div>
+          <button class="btn btn-sm btn-outline-cyan" onclick="app.updateGoalForecaster()">
+            <i class="fa-solid fa-arrows-rotate"></i> Tahmini Yenile
+          </button>
+        </div>
+
+        <div class="forecaster-grid">
+          <!-- Stat 1: Current vs Target Weight -->
+          <div class="forecaster-stat-box">
+            <span class="stat-lbl"><i class="fa-solid fa-weight-scale text-cyan"></i> Kilo Durumu</span>
+            <h3 id="fc-weight-progress">64.0 kg → 72.0 kg</h3>
+            <small class="text-emerald" id="fc-weight-diff">Kalan: +8.0 kg</small>
+          </div>
+
+          <!-- Stat 2: Weekly Velocity -->
+          <div class="forecaster-stat-box">
+            <span class="stat-lbl"><i class="fa-solid fa-gauge-high text-amber"></i> Kilo Alma Hızı</span>
+            <h3 id="fc-weekly-rate">+0.38 kg / hafta</h3>
+            <small class="text-muted" id="fc-rate-status">Ideal Temiz Kas Kazanımı</small>
+          </div>
+
+          <!-- Stat 3: Estimated Time -->
+          <div class="forecaster-stat-box">
+            <span class="stat-lbl"><i class="fa-solid fa-calendar-day text-emerald"></i> Tahmini Kalan Süre</span>
+            <h3 id="fc-days-remaining" class="text-emerald">~21 Hafta (147 Gün)</h3>
+            <small class="text-muted" id="fc-target-date">Tahmini Bitiş: 28 Aralık 2026</small>
+          </div>
+        </div>
+
+        <!-- Progress Bar Visual -->
+        <div class="forecaster-progress-bar-wrap mt-3">
+          <div class="flex justify-between text-xs text-muted mb-1">
+            <span>Başlangıç</span>
+            <span id="fc-progress-pct-text">İlerleme: %0</span>
+            <span>Hedef Kilo</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill bg-emerald" id="fc-progress-bar-fill" style="width: 0%;"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="footer-content">
+      <p>© 2026 <strong>CaloFit</strong> — Sağlıklı Kilo Alma & Kişisel Beslenme Portalı. Tüm Hakları Saklıdır.</p>
+      <div class="footer-links">
+        <button class="btn btn-sm btn-outline-cyan" onclick="app.exportAppData()"><i class="fa-solid fa-download"></i> Verileri Yedeğe Aktar (JSON)</button>
+        <button class="btn btn-sm btn-outline-cyan" onclick="document.getElementById('import-file-input').click()"><i class="fa-solid fa-upload"></i> Yedek Yükle</button>
+        <input type="file" id="import-file-input" style="display:none" accept=".json" onchange="app.importAppData(event)">
+        <button class="btn btn-sm btn-outline-danger" onclick="app.resetAllData()"><i class="fa-solid fa-triangle-exclamation"></i> Tüm Verileri Sıfırla</button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notifications Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Application Logic -->
+  <script src="app.js"></script>
+</body>
+</html>

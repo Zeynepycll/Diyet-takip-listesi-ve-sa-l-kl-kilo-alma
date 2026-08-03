@@ -1,0 +1,13 @@
+# CaloFit — Antigravity AI Assistant Guidelines (.antigravityrules)
+
+# Project Context
+- Project: CaloFit (Sağlıklı Kilo Alma & Fit Beslenme Portalı)
+- Architecture: HTML5, Vanilla CSS3, ES6+ JavaScript SPA (Single Page Application)
+- Storage: Browser LocalStorage (`calofit_app_data_v1`)
+
+# Core Directives for Assistant
+1. Preserve existing functional code in `index.html`, `style.css`, and `app.js`. Do not modify working business logic without explicit request.
+2. Follow architectural conventions documented in `PROJE_KURALLARI.md`.
+3. Keep modular code inside `src/` for future feature extensions.
+4. Ensure dark/light mode compatibility for all UI components.
+5. Use semantic HTML and HSL/Custom Properties for styling.

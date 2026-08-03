@@ -1,0 +1,55 @@
+/* CaloFit — Smoothie & Shake Lab Component Styles */
+
+.shake-presets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.shake-preset-card {
+  background: hsla(150, 25%, 14%, 0.7);
+  border: 1px solid var(--bg-card-border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  position: relative;
+  transition: var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+}
+.shake-preset-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--primary-emerald);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+}
+
+.preset-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: hsla(84, 81%, 44%, 0.18);
+  color: var(--lime-neon);
+  border: 1px solid hsla(84, 81%, 44%, 0.4);
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  font-weight: 800;
+  font-size: 0.8rem;
+}
+
+.ing-chip {
+  background: hsla(150, 25%, 12%, 0.8);
+  border: 1px solid var(--bg-card-border);
+  color: var(--text-main);
+  padding: 0.45rem 0.8rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.825rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: var(--transition-fast);
+}
+.ing-chip.active {
+  background: linear-gradient(135deg, var(--primary-emerald), #047857);
+  color: #FFFFFF;
+  border-color: var(--lime-neon);
+}
