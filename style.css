@@ -57,8 +57,9 @@ body {
   font-family: var(--font-body);
   background-color: var(--bg-dark);
   background-image: 
-    radial-gradient(circle at 12% 15%, hsla(142, 30%, 32%, 0.2) 0%, transparent 45%),
-    radial-gradient(circle at 88% 85%, hsla(138, 25%, 26%, 0.16) 0%, transparent 45%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cg fill='none' stroke='rgba(75, 175, 120, 0.09)' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20,70 C20,40 50,25 70,25 C70,55 50,85 20,70 Z'/%3E%3Cpath d='M20,70 Q45,47 70,25'/%3E%3Cpath d='M90,110 C90,95 105,85 115,85 C115,100 105,115 90,110 Z'/%3E%3Cpath d='M90,110 Q102,97 115,85'/%3E%3Cpath d='M80,35 C65,25 50,45 60,60 C75,75 95,50 80,35 Z'/%3E%3Cpath d='M60,60 Q72,47 80,35'/%3E%3C/g%3E%3C/svg%3E"),
+    radial-gradient(circle at 12% 15%, hsla(142, 30%, 32%, 0.22) 0%, transparent 45%),
+    radial-gradient(circle at 88% 85%, hsla(138, 25%, 26%, 0.18) 0%, transparent 45%),
     radial-gradient(circle at 50% 50%, hsla(145, 20%, 18%, 0.12) 0%, transparent 60%);
   background-attachment: fixed;
   color: var(--text-main);
@@ -66,6 +67,59 @@ body {
   display: flex;
   flex-direction: column;
   line-height: 1.5;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Background Decorative Sage Leaves (Gerçek Adaçayı Yaprak Vektör Şekilleri) */
+.bg-sage-leaves-decor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.leaf-shape {
+  position: absolute;
+  color: var(--emerald-main);
+  filter: drop-shadow(0 8px 25px rgba(0,0,0,0.3));
+  transition: transform var(--transition-normal);
+}
+
+.leaf-top-left {
+  top: -40px;
+  left: -50px;
+  width: 280px;
+  height: 420px;
+  transform: rotate(35deg);
+}
+
+.leaf-top-right {
+  top: -60px;
+  right: -60px;
+  width: 320px;
+  height: 480px;
+  transform: rotate(-45deg) scaleX(-1);
+}
+
+.leaf-bottom-left {
+  bottom: -80px;
+  left: -60px;
+  width: 300px;
+  height: 450px;
+  transform: rotate(-15deg);
+}
+
+.leaf-bottom-right {
+  bottom: -90px;
+  right: -70px;
+  width: 340px;
+  height: 500px;
+  transform: rotate(25deg) scaleX(-1);
 }
 
 /* Custom Scrollbar */
