@@ -1,38 +1,38 @@
 /* ==========================================================================
-   CaloFit — Vibrant Emerald & Neon Lime Design System (Canlı Zümrüt & Neon Fıstık Yeşili)
+   CaloFit — Elegant Sage Green Design System (Sade & Şık Adaçayı Yeşili)
    ========================================================================== */
 
 :root {
-  /* Emerald & Lime Green Palette */
-  --emerald-main: hsl(160, 84%, 39%);          /* #10B981 - Vibrant Emerald Green */
-  --emerald-glow: hsla(160, 84%, 39%, 0.35);
-  --emerald-dark: hsl(155, 80%, 25%);          /* #0B6E4F - Deep Emerald */
-  --lime-neon: hsl(84, 81%, 44%);              /* #84CC16 - Vibrant Neon Lime */
-  --lime-glow: hsla(84, 81%, 44%, 0.3);
+  /* Sage Green & Natural Leaf Palette (Adaçayı Yeşili Tonları) */
+  --emerald-main: hsl(148, 55%, 42%);          /* #2FA876 - Elegant Sage Green */
+  --emerald-glow: hsla(148, 55%, 42%, 0.3);
+  --emerald-dark: hsl(145, 45%, 26%);          /* #236143 - Deep Sage */
+  --lime-neon: hsl(135, 42%, 48%);              /* #45AD6B - Soft Sage Accent */
+  --lime-glow: hsla(135, 42%, 48%, 0.25);
 
-  /* Dark Emerald Backgrounds (Glassmorphism Dark Base) */
-  --bg-dark: hsl(150, 30%, 6%);               /* #09130D - Deep Emerald Charcoal Night */
-  --bg-card: hsla(150, 25%, 11%, 0.82);        /* #112018 - Emerald Glass Card */
-  --bg-card-border: hsla(160, 84%, 39%, 0.25);  /* Glowing Emerald Border */
-  --bg-glass-hover: hsla(150, 30%, 15%, 0.9);
+  /* Dark Sage Green Backgrounds (Mat & Şık Adaçayı Tabanı) */
+  --bg-dark: hsl(145, 22%, 9%);               /* #111A14 - Deep Charcoal Sage Night */
+  --bg-card: hsla(145, 20%, 14%, 0.86);        /* #18271E - Sage Glass Card */
+  --bg-card-border: hsla(142, 35%, 42%, 0.28);  /* Glowing Sage Border */
+  --bg-glass-hover: hsla(145, 22%, 18%, 0.9);
 
-  /* Typography Colors (Bright Mint White for high contrast) */
-  --text-main: hsl(150, 40%, 98%);             /* #F4FAF6 - Bright White Mint Text */
-  --text-muted: hsl(152, 45%, 75%);            /* #86E3CE - Soft Mint Gray */
-  --text-dim: hsl(152, 25%, 52%);              /* #4E8B75 - Soft Label Emerald */
+  /* Typography Colors (Soft Mint White for high contrast) */
+  --text-main: hsl(142, 35%, 97%);             /* #F3F8F5 - Soft White Sage Text */
+  --text-muted: hsl(142, 30%, 75%);            /* #94CDB0 - Soft Muted Sage */
+  --text-dim: hsl(142, 20%, 52%);              /* #5B8871 - Secondary Sage */
 
   /* Functional Accent Color Mappings */
-  --primary-emerald: hsl(160, 84%, 39%);       /* Vibrant Emerald Green */
-  --primary-emerald-glow: hsla(160, 84%, 39%, 0.35);
+  --primary-emerald: hsl(148, 55%, 42%);       /* Sage Green Primary */
+  --primary-emerald-glow: hsla(148, 55%, 42%, 0.3);
   
-  --accent-amber: hsl(84, 81%, 44%);           /* Neon Lime Accent */
-  --accent-amber-glow: hsla(84, 81%, 44%, 0.3);
+  --accent-amber: hsl(135, 42%, 48%);           /* Soft Sage Accent */
+  --accent-amber-glow: hsla(135, 42%, 48%, 0.25);
 
-  --accent-cyan: hsl(188, 86%, 45%);           /* #06B6D4 - Bright Cyan Teal */
-  --accent-cyan-glow: hsla(188, 86%, 45%, 0.3);
+  --accent-cyan: hsl(175, 55%, 42%);           /* Soft Teal Sage */
+  --accent-cyan-glow: hsla(175, 55%, 42%, 0.25);
 
-  --accent-purple: hsl(265, 85%, 68%);         /* Vibrant Violet */
-  --accent-danger: hsl(350, 80%, 60%);         /* Crimson Red */
+  --accent-purple: hsl(265, 65%, 68%);         /* Soft Violet */
+  --accent-danger: hsl(350, 75%, 60%);         /* Muted Red */
 
   /* Fonts */
   --font-heading: 'Outfit', -apple-system, sans-serif;
@@ -57,9 +57,9 @@ body {
   font-family: var(--font-body);
   background-color: var(--bg-dark);
   background-image: 
-    radial-gradient(circle at 10% 10%, hsla(160, 84%, 39%, 0.15) 0%, transparent 40%),
-    radial-gradient(circle at 90% 85%, hsla(84, 81%, 44%, 0.12) 0%, transparent 40%),
-    radial-gradient(circle at 50% 50%, hsla(150, 40%, 20%, 0.1) 0%, transparent 50%);
+    radial-gradient(circle at 12% 15%, hsla(142, 30%, 32%, 0.2) 0%, transparent 45%),
+    radial-gradient(circle at 88% 85%, hsla(138, 25%, 26%, 0.16) 0%, transparent 45%),
+    radial-gradient(circle at 50% 50%, hsla(145, 20%, 18%, 0.12) 0%, transparent 60%);
   background-attachment: fixed;
   color: var(--text-main);
   min-height: 100vh;
@@ -1972,31 +1972,31 @@ h1, h2, h3, h4, h5 {
   transform: translateY(-1px);
 }
 
-/* Light Theme Overrides */
+/* Light Theme Overrides (Adaçayı Yeşili Açık Tema) */
 body[data-theme="light"] {
-  --bg-dark: #F4F7F5;
-  --bg-card: #FFFFFF;
-  --bg-card-border: hsla(160, 45%, 35%, 0.25);
-  --bg-glass-hover: #EBF3EF;
+  --bg-dark: #E4ECE6;
+  --bg-card: #F2F7F4;
+  --bg-card-border: hsla(142, 30%, 40%, 0.2);
+  --bg-glass-hover: #D9E4DC;
 
-  --text-main: #0B1911;      /* Deep bold charcoal for primary text */
-  --text-muted: #1F3A2C;     /* High-contrast dark green-slate for muted text */
-  --text-dim: #2D523E;       /* Distinct secondary text */
+  --text-main: #13241A;      /* Deep sage charcoal for primary text */
+  --text-muted: #274534;     /* High-contrast dark sage slate for muted text */
+  --text-dim: #3A614A;       /* Distinct secondary sage text */
 
-  --primary-emerald: #047857;
-  --primary-emerald-glow: rgba(4, 120, 87, 0.2);
+  --primary-emerald: #238459;
+  --primary-emerald-glow: rgba(35, 132, 89, 0.2);
 
-  --lime-neon: #4D7C0F;
-  --lime-glow: rgba(77, 124, 15, 0.2);
+  --lime-neon: #3C8353;
+  --lime-glow: rgba(60, 131, 83, 0.2);
 
-  --accent-amber: #B45309;
-  --accent-cyan: #0F766E;
+  --accent-amber: #A15C08;
+  --accent-cyan: #147367;
 
   background-color: var(--bg-dark);
   background-image: 
-    radial-gradient(circle at 10% 10%, hsla(160, 45%, 35%, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 90% 85%, hsla(84, 81%, 44%, 0.06) 0%, transparent 40%),
-    radial-gradient(circle at 50% 50%, hsla(150, 40%, 20%, 0.05) 0%, transparent 50%);
+    radial-gradient(circle at 10% 10%, hsla(142, 35%, 65%, 0.25) 0%, transparent 45%),
+    radial-gradient(circle at 90% 85%, hsla(138, 30%, 70%, 0.2) 0%, transparent 45%),
+    radial-gradient(circle at 50% 50%, hsla(145, 25%, 80%, 0.15) 0%, transparent 60%);
   color: var(--text-main);
 }
 
