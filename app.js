@@ -189,22 +189,22 @@ class NutriGainApp {
         { date: '2026-07-29', weight: 64.0, arm: 33.0, chest: 95.0, waist: 76.0 }
       ],
       gamification: {
-        userXP: 355,
-        streakDays: 3,
-        maxStreakDays: 5,
-        unlockedBadgeIds: ['badge_protein', 'badge_water_5'],
-        waterGoalsCompletedCount: 5,
+        userXP: 140,
+        streakDays: 4,
+        maxStreakDays: 6,
+        unlockedBadgeIds: ['badge_protein'],
+        waterGoalsCompletedCount: 3,
         shakeLabCreatedCount: 1
       }
     };
 
-    // Gamification Datasets (🌱 Doğal Beslenme Seviyeleri & Rozetler)
+    // Gamification Datasets (🌿 Doğal Beslenme Seviyeleri & Rozetler)
     this.levelsDataset = [
-      { level: 1, title: 'Tohum', icon: '🌱', minXp: 0, maxXp: 250, badgeName: '🌱 Level 1: Tohum' },
-      { level: 2, title: 'Filiz', icon: '🌿', minXp: 250, maxXp: 650, badgeName: '🌿 Level 2: Filiz' },
-      { level: 3, title: 'Yaprak', icon: '🍃', minXp: 650, maxXp: 1300, badgeName: '🍃 Level 3: Yaprak' },
-      { level: 4, title: 'Meşe', icon: '🌳', minXp: 1300, maxXp: 2500, badgeName: '🌳 Level 4: Meşe' },
-      { level: 5, title: 'Orman Kralı', icon: '👑', minXp: 2500, maxXp: 5000, badgeName: '👑 Level 5: Orman Kralı' }
+      { level: 1, title: 'Filiz', icon: '🌿', minXp: 0, maxXp: 250, badgeName: '🌿 Level 1: Filiz' },
+      { level: 2, title: 'Yaprak', icon: '🍃', minXp: 250, maxXp: 650, badgeName: '🍃 Level 2: Yaprak' },
+      { level: 3, title: 'Meşe', icon: '🌳', minXp: 650, maxXp: 1300, badgeName: '🌳 Level 3: Meşe' },
+      { level: 4, title: 'Orman Kralı', icon: '👑', minXp: 1300, maxXp: 2500, badgeName: '👑 Level 4: Orman Kralı' },
+      { level: 5, title: 'Titan', icon: '🏆', minXp: 2500, maxXp: 5000, badgeName: '🏆 Level 5: Titan' }
     ];
 
     this.badgesDataset = [
@@ -2331,6 +2331,25 @@ class NutriGainApp {
       }
       this.saveState();
     }
+  }
+
+  testIncrementStreak() {
+    if (!this.state.gamification) {
+      this.state.gamification = { userXP: 140, streakDays: 4, maxStreakDays: 6, unlockedBadgeIds: ['badge_protein'], waterGoalsCompletedCount: 3, shakeLabCreatedCount: 1 };
+    }
+
+    const g = this.state.gamification;
+    g.streakDays = (g.streakDays || 0) + 1;
+    if (g.streakDays > (g.maxStreakDays || 0)) {
+      g.maxStreakDays = g.streakDays;
+    }
+
+    this.addXP(40, `${g.streakDays}. Gün Kilo Alma Serisi`);
+    this.showToastNotification(`🔥 Tebrikler! Kilo alma seriniz ${g.streakDays} güne yükseldi!`, 'fa-fire');
+    this.triggerConfetti();
+    this.checkAndGrantBadges();
+    this.saveState();
+    this.renderGamification();
   }
 
   testUnlockNextBadge() {
