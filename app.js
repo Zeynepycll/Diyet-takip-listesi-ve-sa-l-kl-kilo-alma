@@ -2066,6 +2066,180 @@ class NutriGainApp {
       `;
     }).join('');
   }
+
+  // --- PDF REPORT EXPORT MODULE ---
+  openPdfModal() {
+    const modal = document.getElementById('pdf-modal');
+    const container = document.getElementById('pdf-report-paper');
+    if (!modal || !container) return;
+
+    container.innerHTML = this.buildPdfReportHtml();
+    modal.style.display = 'flex';
+  }
+
+  closePdfModal() {
+    const modal = document.getElementById('pdf-modal');
+    if (modal) modal.style.display = 'none';
+  }
+
+  buildPdfReportHtml() {
+    const prof = this.state.profile;
+    const meals = this.state.todayLogs.meals || [];
+    const history = this.state.weightHistory || [];
+    const dateStr = new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+
+    const totalCal = meals.reduce((acc, m) => acc + (m.calories || 0), 0);
+    const totalProt = meals.reduce((acc, m) => acc + (m.protein || 0), 0);
+    const totalCarb = meals.reduce((acc, m) => acc + (m.carbs || 0), 0);
+    const totalFat = meals.reduce((acc, m) => acc + (m.fat || 0), 0);
+
+    const targetCal = prof.targetCalories || 2850;
+    const diffCal = totalCal - targetCal;
+
+    return `
+      <div class="pdf-template-wrapper">
+        <div class="pdf-header">
+          <div class="pdf-brand">
+            <h2 class="pdf-brand-title">CaloFit Pro</h2>
+            <p class="pdf-brand-sub">Sağlıklı Kilo Alma & Kişisel Beslenme Portalı Raporu</p>
+          </div>
+          <div class="pdf-meta">
+            <div><strong>Tarih:</strong> ${dateStr}</div>
+            <div><strong>Program:</strong> Clean Bulking (Kalori Fazlası)</div>
+          </div>
+        </div>
+
+        <div class="pdf-section-title">📊 Profil ve Günlük Kalori Özeti</div>
+        <div class="pdf-summary-grid">
+          <div class="pdf-box">
+            <small>Kilo / Hedef Kilo</small>
+            <strong>${prof.weight.toFixed(1)} kg / ${prof.targetWeight.toFixed(1)} kg</strong>
+          </div>
+          <div class="pdf-box">
+            <small>Günlük Hedef Kalori</small>
+            <strong>${targetCal.toLocaleString('tr-TR')} kcal</strong>
+          </div>
+          <div class="pdf-box">
+            <small>Bugün Alınan Kalori</small>
+            <strong>${totalCal.toLocaleString('tr-TR')} kcal</strong>
+          </div>
+          <div class="pdf-box">
+            <small>Net Kalori Denge</small>
+            <strong class="${diffCal >= 0 ? 'text-emerald' : 'text-amber'}">${diffCal >= 0 ? '+' : ''}${diffCal} kcal</strong>
+          </div>
+        </div>
+
+        <div class="pdf-section-title">🥩 Makro Besin Dağılım İlerlemesi</div>
+        <table class="pdf-table">
+          <thead>
+            <tr>
+              <th>Makro Besin Öğesi</th>
+              <th>Hedef Miktar</th>
+              <th>Gerçekleşen Tüketim</th>
+              <th>Uyum Yüzdesi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Protein</strong></td>
+              <td>${prof.proteinTarget || 140} g</td>
+              <td>${totalProt} g</td>
+              <td>%${Math.min(100, Math.round((totalProt / (prof.proteinTarget || 140)) * 100))}</td>
+            </tr>
+            <tr>
+              <td><strong>Karbonhidrat</strong></td>
+              <td>${prof.carbTarget || 360} g</td>
+              <td>${totalCarb} g</td>
+              <td>%${Math.min(100, Math.round((totalCarb / (prof.carbTarget || 360)) * 100))}</td>
+            </tr>
+            <tr>
+              <td><strong>Sağlıklı Yağlar</strong></td>
+              <td>${prof.fatTarget || 95} g</td>
+              <td>${totalFat} g</td>
+              <td>%${Math.min(100, Math.round((totalFat / (prof.fatTarget || 95)) * 100))}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="pdf-section-title">🍲 Bugün Tüketilen Öğün Detayları (${meals.length} Adet)</div>
+        <table class="pdf-table">
+          <thead>
+            <tr>
+              <th>Öğün Kategori</th>
+              <th>Yemek / Besin Adı</th>
+              <th>Kalori</th>
+              <th>Protein</th>
+              <th>Karb</th>
+              <th>Yağ</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${meals.length === 0 ? '<tr><td colspan="6" style="text-align:center; padding:12px;">Henüz kaydedilmiş öğün bulunmuyor.</td></tr>' : meals.map(m => `
+              <tr>
+                <td>${m.meal}</td>
+                <td><strong>${m.name}</strong></td>
+                <td>${m.calories} kcal</td>
+                <td>${m.protein} g</td>
+                <td>${m.carbs} g</td>
+                <td>${m.fat} g</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+
+        <div class="pdf-section-title">📈 Son Kilo & Beden Ölçüsü Değişim Kayıtları</div>
+        <table class="pdf-table">
+          <thead>
+            <tr>
+              <th>Kayıt Tarihi</th>
+              <th>Kilo (kg)</th>
+              <th>Kol (cm)</th>
+              <th>Göğüs (cm)</th>
+              <th>Bel (cm)</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${history.slice().reverse().slice(0, 5).map(h => `
+              <tr>
+                <td>${h.date}</td>
+                <td><strong>${h.weight.toFixed(1)} kg</strong></td>
+                <td>${h.arm ? h.arm + ' cm' : '-'}</td>
+                <td>${h.chest ? h.chest + ' cm' : '-'}</td>
+                <td>${h.waist ? h.waist + ' cm' : '-'}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+
+        <div class="pdf-footer-note">
+          <p>⚠️ <strong>Not:</strong> Bu belge CaloFit Kişisel Beslenme Portalı tarafından dijital olarak üretilmiştir. Sağlıklı kilo alma ve kalori takibi rehberidir.</p>
+        </div>
+      </div>
+    `;
+  }
+
+  downloadPdfReport() {
+    const element = document.getElementById('pdf-report-paper');
+    if (!element) return;
+
+    if (window.html2pdf) {
+      const dateStr = new Date().toISOString().slice(0, 10);
+      const opt = {
+        margin: 10,
+        filename: `CaloFit_Beslenme_Raporu_${dateStr}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      this.showToastNotification('📄 PDF belgeniz hazırlanıyor ve indiriliyor...', 'fa-file-pdf');
+      window.html2pdf().set(opt).from(element).save().then(() => {
+        this.showToastNotification('✅ PDF raporu başarıyla indirildi!', 'fa-circle-check');
+      });
+    } else {
+      window.print();
+    }
+  }
 }
 
 // Global App Instance

@@ -2741,4 +2741,172 @@ body[data-theme="light"] .adv-ingredients-list {
   background: #F0F6F2;
 }
 
+/* ==========================================================================
+   PDF Export & Modal Styles
+   ========================================================================== */
+.pdf-export-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: hsla(84, 81%, 44%, 0.15);
+  border: 1px solid hsla(84, 81%, 44%, 0.4);
+  color: var(--text-main);
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.pdf-export-btn:hover {
+  background: var(--accent-amber);
+  color: #09130D;
+  box-shadow: 0 0 15px var(--accent-amber-glow);
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.pdf-modal-card {
+  width: 100%;
+  max-width: 860px;
+  max-height: 92vh;
+  background: var(--bg-dark);
+  border: 1px solid hsla(160, 84%, 39%, 0.3);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+  overflow: hidden;
+}
+
+.pdf-actions-bar {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  background: hsla(150, 25%, 10%, 0.8);
+  border-bottom: 1px solid hsla(160, 84%, 39%, 0.15);
+}
+
+.pdf-report-paper {
+  background: #FFFFFF !important;
+  color: #1E293B !important;
+  padding: 2.2rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  max-height: 65vh;
+  overflow-y: auto;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+}
+
+.pdf-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #10B981;
+  padding-bottom: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.pdf-brand-title {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  color: #065F46;
+  margin: 0;
+}
+
+.pdf-brand-sub {
+  font-size: 0.85rem;
+  color: #64748B;
+  margin: 0;
+}
+
+.pdf-meta {
+  font-size: 0.82rem;
+  color: #475569;
+  text-align: right;
+}
+
+.pdf-section-title {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #047857;
+  background: #ECFDF5;
+  padding: 0.4rem 0.75rem;
+  border-left: 4px solid #10B981;
+  margin-top: 1.25rem;
+  margin-bottom: 0.75rem;
+  border-radius: 4px;
+}
+
+.pdf-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.pdf-box {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  padding: 0.65rem;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.pdf-box small {
+  display: block;
+  font-size: 0.72rem;
+  color: #64748B;
+}
+
+.pdf-box strong {
+  font-size: 0.95rem;
+  color: #0F172A;
+}
+
+.pdf-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+  font-size: 0.82rem;
+}
+
+.pdf-table th {
+  background: #F1F5F9;
+  color: #334155;
+  text-align: left;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid #E2E8F0;
+  font-weight: 700;
+}
+
+.pdf-table td {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #E2E8F0;
+  color: #1E293B;
+}
+
+.pdf-footer-note {
+  margin-top: 1.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed #CBD5E1;
+  font-size: 0.75rem;
+  color: #64748B;
+}
+
 
