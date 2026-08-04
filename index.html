@@ -1261,7 +1261,51 @@
           </div>
         </div>
       </div>
-    </section>
+    <!-- Standalone Data Backup & Sync Glass Card -->
+    <div class="glass-card backup-sync-card full-width-card mt-4 mb-4">
+      <div class="card-header">
+        <div>
+          <h3><i class="fa-solid fa-shield-halved text-emerald"></i> Veri Güvenliği & Çevrimdışı Yedekleme Yönetimi</h3>
+          <p class="text-sm text-muted">Tüm profil, öğün, egzersiz ve tartı verileriniz sunucusuz %100 tarayıcınızda güvendedir. Verilerinizi istediğiniz zaman bilgisayarınıza yedekleyebilir veya başka cihaza aktarabilirsiniz.</p>
+        </div>
+      </div>
+
+      <div class="backup-actions-grid mt-3">
+        <div class="backup-action-box">
+          <div class="b-icon text-cyan"><i class="fa-solid fa-cloud-arrow-down"></i></div>
+          <div class="b-text">
+            <strong>JSON Yedeği İndir</strong>
+            <small>Tüm CaloFit geçmişinizi tek dosyada saklayın.</small>
+          </div>
+          <button class="btn btn-emerald btn-sm" onclick="app.exportAppData()">
+            <i class="fa-solid fa-download"></i> Yedeği İndir (.json)
+          </button>
+        </div>
+
+        <div class="backup-action-box">
+          <div class="b-icon text-amber"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+          <div class="b-text">
+            <strong>Yedek Dosyası Yükle</strong>
+            <small>Farklı bir cihazdaki veya geçmişteki yedeklerinizi geri getirin.</small>
+          </div>
+          <button class="btn btn-amber btn-sm" onclick="document.getElementById('backup-import-file-input').click()">
+            <i class="fa-solid fa-upload"></i> Dosya Seç & Yükle
+          </button>
+          <input type="file" id="backup-import-file-input" style="display:none" accept=".json" onchange="app.importAppData(event)">
+        </div>
+
+        <div class="backup-action-box">
+          <div class="b-icon text-danger"><i class="fa-solid fa-trash-can"></i></div>
+          <div class="b-text">
+            <strong>Fabrika Ayarlarına Dön</strong>
+            <small>Tüm kayıtlı verileri ve geçmişi sıfırlayın.</small>
+          </div>
+          <button class="btn btn-outline-danger btn-sm" onclick="app.resetAllData()">
+            <i class="fa-solid fa-triangle-exclamation"></i> Verileri Sıfırla
+          </button>
+        </div>
+      </div>
+    </div>
 
   </main>
 

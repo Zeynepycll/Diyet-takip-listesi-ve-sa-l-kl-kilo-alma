@@ -2909,4 +2909,55 @@ body[data-theme="light"] .adv-ingredients-list {
   color: #64748B;
 }
 
+/* ==========================================================================
+   Backup & Data Sync Styles
+   ========================================================================== */
+.backup-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.backup-action-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1.25rem;
+  background: hsla(150, 25%, 11%, 0.75);
+  border: 1px solid hsla(160, 84%, 39%, 0.2);
+  border-radius: var(--radius-md);
+  gap: 0.75rem;
+  transition: all var(--transition-normal);
+}
+
+.backup-action-box:hover {
+  border-color: var(--emerald-main);
+  background: hsla(150, 25%, 14%, 0.85);
+  transform: translateY(-3px);
+}
+
+.backup-action-box .b-icon {
+  font-size: 2.2rem;
+}
+
+.backup-action-box .b-text strong {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--text-main);
+  margin-bottom: 0.2rem;
+}
+
+.backup-action-box .b-text small {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  display: block;
+  line-height: 1.3;
+}
+
+body[data-theme="light"] .backup-action-box {
+  background: #FAFCFA;
+  border-color: hsla(160, 45%, 35%, 0.2);
+}
+
 
