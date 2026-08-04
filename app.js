@@ -2248,18 +2248,32 @@ class NutriGainApp {
     if (!element) return;
 
     if (window.html2pdf) {
+      this.showToastNotification('📄 PDF belgeniz hazırlanıyor ve indiriliyor...', 'fa-file-pdf');
+
+      // Temporarily remove max-height and overflow scroll constraints for html2canvas
+      const prevMaxHeight = element.style.maxHeight;
+      const prevOverflow = element.style.overflow;
+      element.style.maxHeight = 'none';
+      element.style.overflow = 'visible';
+
       const dateStr = new Date().toISOString().slice(0, 10);
       const opt = {
-        margin: 10,
+        margin: [10, 10, 10, 10],
         filename: `CaloFit_Beslenme_Raporu_${dateStr}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
+        html2canvas: { scale: 2, useCORS: true, logging: false },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
-      this.showToastNotification('📄 PDF belgeniz hazırlanıyor ve indiriliyor...', 'fa-file-pdf');
       window.html2pdf().set(opt).from(element).save().then(() => {
+        element.style.maxHeight = prevMaxHeight;
+        element.style.overflow = prevOverflow;
         this.showToastNotification('✅ PDF raporu başarıyla indirildi!', 'fa-circle-check');
+      }).catch((err) => {
+        console.error('html2pdf error, fallback to print:', err);
+        element.style.maxHeight = prevMaxHeight;
+        element.style.overflow = prevOverflow;
+        window.print();
       });
     } else {
       window.print();

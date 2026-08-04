@@ -3123,4 +3123,57 @@ body[data-theme="light"] .grocery-check-row {
   border-color: hsla(160, 45%, 35%, 0.12);
 }
 
+/* ==========================================================================
+   Print Media Styles (PDF & Direct Printing Fix)
+   ========================================================================== */
+@media print {
+  /* Hide all main app UI elements when printing */
+  body > *:not(#pdf-modal) {
+    display: none !important;
+  }
+
+  /* Make PDF modal full width and page-friendly */
+  #pdf-modal {
+    position: static !important;
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    background: #FFFFFF !important;
+    backdrop-filter: none !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .pdf-modal-card {
+    max-width: 100% !important;
+    max-height: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: #FFFFFF !important;
+    overflow: visible !important;
+  }
+
+  .pdf-actions-bar,
+  .modal-header,
+  .modal-close-btn,
+  .toast-container {
+    display: none !important;
+  }
+
+  .pdf-report-paper {
+    max-height: none !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: #FFFFFF !important;
+    color: #1E293B !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 15mm 15mm 15mm 15mm;
+  }
+}
+
 
