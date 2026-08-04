@@ -68,6 +68,14 @@
           </div>
         </div>
 
+        <div class="status-chip gamification-hdr-chip" onclick="app.switchTab('sec-dashboard')" style="cursor: pointer;">
+          <i class="fa-solid fa-seedling text-emerald" id="hdr-level-icon"></i>
+          <div>
+            <span class="chip-label" id="hdr-level-title">🌱 Level 1: Tohum</span>
+            <span class="chip-value text-amber" id="hdr-streak-val">🔥 0 Gün Seri</span>
+          </div>
+        </div>
+
         <button id="theme-toggle-btn" class="theme-toggle-btn" onclick="app.toggleTheme()" title="Açık / Koyu Tema Değiştir">
           <i class="fa-solid fa-moon" id="theme-toggle-icon"></i>
           <span id="theme-toggle-label">Koyu</span>
@@ -280,6 +288,50 @@
 
         </div>
 
+      </div>
+
+      <!-- Gamification & Level Badges Card (Doğal Beslenme Seviyeleri) -->
+      <div class="glass-card gamification-card full-width-card mt-4" id="gamification-card">
+        <div class="card-header flex-wrap gap-2">
+          <div>
+            <h3><i class="fa-solid fa-trophy text-amber fa-bounce"></i> Doğal Beslenme Seviyeniz & Başarım Vitrini</h3>
+            <p class="text-sm text-muted">Düzenli beslenerek, su içerek ve kilo takibi yaparak XP kazanın, seviye atlayın ve motivasyon rozetlerinin kilidini açın!</p>
+          </div>
+
+          <div class="level-badge-pill">
+            <span id="level-badge-icon">🌱</span>
+            <span id="level-badge-name">Level 1: Tohum</span>
+          </div>
+        </div>
+
+        <div class="gamification-overview-grid mt-3">
+          <!-- Level XP Bar Box -->
+          <div class="level-xp-box">
+            <div class="xp-meta">
+              <span><i class="fa-solid fa-star text-amber"></i> Mevcut Deneyim Puanı (XP)</span>
+              <strong id="xp-num-display">0 / 250 XP</strong>
+            </div>
+            <div class="progress-bar-bg mt-2">
+              <div class="progress-bar-fill fill-amber" id="xp-progress-fill" style="width: 0%"></div>
+            </div>
+            <small class="text-muted d-block mt-1" id="next-level-text">Bir sonraki seviye: 🌿 Filiz (250 XP)</small>
+          </div>
+
+          <!-- Streak Counter Box -->
+          <div class="streak-counter-box">
+            <div class="streak-icon"><i class="fa-solid fa-fire text-amber"></i></div>
+            <div class="streak-info">
+              <span class="s-label">Kilo Alma Serisi</span>
+              <strong id="streak-days-count" class="text-amber">0 Gün Kesintisiz</strong>
+              <small class="text-muted" id="streak-record-text">En Yüksek Rekor: 0 Gün</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Badges Showcase Grid -->
+        <div class="badges-showcase-grid mt-4" id="badges-showcase-grid">
+          <!-- Rendered dynamically by app.js -->
+        </div>
       </div>
 
       <!-- Standalone Water Reminder & Hydration Glass Card -->
@@ -1346,6 +1398,9 @@
       </div>
     </div>
   </div>
+
+  <!-- Canvas Confetti Overlay -->
+  <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
 
   <!-- Toast Notifications Container -->
   <div id="toast-container" class="toast-container"></div>

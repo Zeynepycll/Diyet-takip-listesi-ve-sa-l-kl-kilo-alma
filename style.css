@@ -2966,4 +2966,197 @@ body[data-theme="light"] .grocery-check-row {
   }
 }
 
+/* ==========================================================================
+   Gamification, 🌱 Doğal Beslenme Seviyeleri & Confetti Styles
+   ========================================================================== */
+.gamification-card {
+  border: 1px solid hsla(84, 81%, 44%, 0.3);
+  background: linear-gradient(135deg, hsla(150, 25%, 11%, 0.92) 0%, hsla(155, 30%, 14%, 0.85) 100%);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px hsla(84, 81%, 44%, 0.08);
+}
+
+.level-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: hsla(84, 81%, 44%, 0.18);
+  border: 1px solid hsla(84, 81%, 44%, 0.4);
+  padding: 0.4rem 0.85rem;
+  border-radius: 30px;
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--accent-amber);
+}
+
+.gamification-overview-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .gamification-overview-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.level-xp-box {
+  background: hsla(150, 30%, 8%, 0.6);
+  border: 1px solid hsla(160, 84%, 39%, 0.2);
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.xp-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.88rem;
+  color: var(--text-main);
+}
+
+.streak-counter-box {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: hsla(84, 81%, 44%, 0.1);
+  border: 1px solid hsla(84, 81%, 44%, 0.3);
+  border-radius: var(--radius-md);
+}
+
+.streak-counter-box .streak-icon {
+  font-size: 2.2rem;
+}
+
+.streak-info .s-label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.streak-info strong {
+  display: block;
+  font-size: 1.1rem;
+  font-family: var(--font-heading);
+}
+
+.badges-showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.badge-item-card {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.badge-item-card.unlocked {
+  background: hsla(150, 25%, 13%, 0.8);
+  border: 1px solid hsla(160, 84%, 39%, 0.3);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.badge-item-card.unlocked:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-amber);
+}
+
+.badge-item-card.locked {
+  background: hsla(150, 15%, 8%, 0.4);
+  border: 1px stroke rgba(255,255,255,0.06);
+  opacity: 0.45;
+  filter: grayscale(0.8);
+}
+
+.badge-icon-box {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: hsla(150, 20%, 9%, 0.8);
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.badge-check-mark {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--emerald-main);
+  color: #09130D;
+  font-size: 0.65rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge-info strong {
+  display: block;
+  font-size: 0.88rem;
+  font-family: var(--font-heading);
+  color: var(--text-main);
+  margin-bottom: 0.15rem;
+}
+
+.badge-info small {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.2;
+  margin-bottom: 0.25rem;
+}
+
+.badge-xp-tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--accent-amber);
+  background: hsla(84, 81%, 44%, 0.15);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+}
+
+.confetti-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 10000;
+}
+
+body[data-theme="light"] .gamification-card {
+  background: #FFFFFF;
+  border-color: hsla(160, 45%, 35%, 0.25);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+}
+
+body[data-theme="light"] .level-xp-box {
+  background: #F0F7F3;
+  border-color: hsla(160, 45%, 35%, 0.15);
+}
+
+body[data-theme="light"] .badge-item-card.unlocked {
+  background: #FAFCFA;
+  border-color: hsla(160, 45%, 35%, 0.2);
+}
+
 

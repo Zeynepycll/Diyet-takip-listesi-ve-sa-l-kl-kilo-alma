@@ -187,8 +187,34 @@ class NutriGainApp {
         { date: '2026-07-15', weight: 63.3, arm: 32.5, chest: 94.0, waist: 75.5 },
         { date: '2026-07-22', weight: 63.7, arm: 32.8, chest: 94.5, waist: 75.8 },
         { date: '2026-07-29', weight: 64.0, arm: 33.0, chest: 95.0, waist: 76.0 }
-      ]
+      ],
+      gamification: {
+        userXP: 180,
+        streakDays: 3,
+        maxStreakDays: 5,
+        unlockedBadgeIds: ['badge_protein'],
+        waterGoalsCompletedCount: 2,
+        shakeLabCreatedCount: 1
+      }
     };
+
+    // Gamification Datasets (🌱 Doğal Beslenme Seviyeleri & Rozetler)
+    this.levelsDataset = [
+      { level: 1, title: 'Tohum', icon: '🌱', minXp: 0, maxXp: 250, badgeName: '🌱 Level 1: Tohum' },
+      { level: 2, title: 'Filiz', icon: '🌿', minXp: 250, maxXp: 650, badgeName: '🌿 Level 2: Filiz' },
+      { level: 3, title: 'Yaprak', icon: '🍃', minXp: 650, maxXp: 1300, badgeName: '🍃 Level 3: Yaprak' },
+      { level: 4, title: 'Meşe', icon: '🌳', minXp: 1300, maxXp: 2500, badgeName: '🌳 Level 4: Meşe' },
+      { level: 5, title: 'Orman Kralı', icon: '👑', minXp: 2500, maxXp: 5000, badgeName: '👑 Level 5: Orman Kralı' }
+    ];
+
+    this.badgesDataset = [
+      { id: 'badge_water_5', title: 'Yaşam Pınarı', icon: 'fa-droplet', iconColor: 'text-cyan', desc: '5 Kez Günlük Su Hedefini Tamamla', xpReward: 100 },
+      { id: 'badge_protein', title: 'Doğal Protein Gücü', icon: 'fa-drumstick-bite', iconColor: 'text-emerald', desc: 'Günlük Protein Hedefini Aş', xpReward: 75 },
+      { id: 'badge_streak_3', title: 'Kilo Alma Serisi (3 Gün)', icon: 'fa-fire', iconColor: 'text-amber', desc: '3 Gün Üst Üste Kalori Hedefini Tamamla', xpReward: 150 },
+      { id: 'badge_streak_7', title: 'Sarsılmaz Disiplin (7 Gün)', icon: 'fa-bolt', iconColor: 'text-amber', desc: '7 Gün Üst Üste Kalori Serisi Yakala', xpReward: 300 },
+      { id: 'badge_weight_5', title: 'Gelişim Kökleri', icon: 'fa-chart-line', iconColor: 'text-cyan', desc: '5 Adet Kilo Kaydı Ekle', xpReward: 100 },
+      { id: 'badge_shake_master', title: 'Shake Laborantı', icon: 'fa-blender', iconColor: 'text-purple', desc: 'Shake Lab\'den 3 Kere Tarif Kaydet', xpReward: 80 }
+    ];
 
     this.currentTheme = 'dark';
     this.init();
@@ -1172,9 +1198,10 @@ class NutriGainApp {
       }
     }
 
-    // 4. Render Weight Table & Charts
+    // 4. Render Weight Table, Charts & Gamification
     this.renderWeightHistoryTable();
     this.renderWeightChart();
+    this.renderGamification();
   }
 
   renderWeightHistoryTable() {
@@ -2226,6 +2253,193 @@ class NutriGainApp {
     } else {
       this.showToastNotification('📋 Market listeniz hazırlandı!', 'fa-copy');
     }
+  }
+
+  // --- GAMIFICATION, SEVİYE & ROZET SİSTEMİ (DOĞAL BESLENME SEVİYELERİ) ---
+  addXP(amount, reason) {
+    if (!this.state.gamification) {
+      this.state.gamification = { userXP: 0, streakDays: 1, maxStreakDays: 1, unlockedBadgeIds: [], waterGoalsCompletedCount: 0, shakeLabCreatedCount: 0 };
+    }
+
+    const currentLvl = this.getCurrentLevel();
+    this.state.gamification.userXP = (this.state.gamification.userXP || 0) + amount;
+    const newLvl = this.getCurrentLevel();
+
+    if (newLvl.level > currentLvl.level) {
+      this.showToastNotification(`🎉 TEBRİKLER! Seviye Atladınız: ${newLvl.icon} ${newLvl.title}!`, 'fa-trophy');
+      this.triggerConfetti();
+    } else if (reason) {
+      this.showToastNotification(`⭐ +${amount} XP Kazandınız! (${reason})`, 'fa-star');
+    }
+
+    this.checkAndGrantBadges();
+    this.saveState();
+    this.renderGamification();
+  }
+
+  getCurrentLevel() {
+    const xp = (this.state.gamification ? this.state.gamification.userXP : 0) || 0;
+    let curr = this.levelsDataset[0];
+    for (let l of this.levelsDataset) {
+      if (xp >= l.minXp) curr = l;
+    }
+    return curr;
+  }
+
+  checkAndGrantBadges() {
+    if (!this.state.gamification) return;
+    const g = this.state.gamification;
+    if (!g.unlockedBadgeIds) g.unlockedBadgeIds = [];
+
+    const meals = this.state.todayLogs.meals || [];
+    const totalProt = meals.reduce((acc, m) => acc + (m.protein || 0), 0);
+    const targetProt = this.state.profile.proteinTarget || 140;
+
+    // Condition 1: Protein Goal
+    if (totalProt >= targetProt && !g.unlockedBadgeIds.includes('badge_protein')) {
+      this.unlockBadge('badge_protein');
+    }
+
+    // Condition 2: 3-Day Streak
+    if ((g.streakDays || 0) >= 3 && !g.unlockedBadgeIds.includes('badge_streak_3')) {
+      this.unlockBadge('badge_streak_3');
+    }
+
+    // Condition 3: 7-Day Streak
+    if ((g.streakDays || 0) >= 7 && !g.unlockedBadgeIds.includes('badge_streak_7')) {
+      this.unlockBadge('badge_streak_7');
+    }
+
+    // Condition 4: Weight logs >= 5
+    if ((this.state.weightHistory || []).length >= 5 && !g.unlockedBadgeIds.includes('badge_weight_5')) {
+      this.unlockBadge('badge_weight_5');
+    }
+  }
+
+  unlockBadge(badgeId) {
+    if (!this.state.gamification) return;
+    const g = this.state.gamification;
+    if (!g.unlockedBadgeIds) g.unlockedBadgeIds = [];
+
+    if (!g.unlockedBadgeIds.includes(badgeId)) {
+      g.unlockedBadgeIds.push(badgeId);
+      const b = (this.badgesDataset || []).find(item => item.id === badgeId);
+      if (b) {
+        g.userXP = (g.userXP || 0) + (b.xpReward || 50);
+        this.showToastNotification(`🎖️ YENİ ROZET KAZANILDILAR: "${b.title}"! (+${b.xpReward} XP)`, 'fa-award');
+        this.triggerConfetti();
+      }
+      this.saveState();
+    }
+  }
+
+  renderGamification() {
+    if (!this.state.gamification) {
+      this.state.gamification = { userXP: 180, streakDays: 3, maxStreakDays: 5, unlockedBadgeIds: ['badge_protein'], waterGoalsCompletedCount: 2, shakeLabCreatedCount: 1 };
+    }
+
+    const g = this.state.gamification;
+    const xp = g.userXP || 0;
+    const currLvl = this.getCurrentLevel();
+    const nextLvlIndex = this.levelsDataset.findIndex(l => l.level === currLvl.level) + 1;
+    const nextLvl = this.levelsDataset[nextLvlIndex] || currLvl;
+
+    const levelSpan = (nextLvl.minXp || currLvl.maxXp) - currLvl.minXp;
+    const xpProgressInLevel = Math.max(0, xp - currLvl.minXp);
+    const xpPct = currLvl.level === 5 ? 100 : Math.min(100, Math.round((xpProgressInLevel / levelSpan) * 100));
+
+    // Update Header Status Chips
+    const elHdrLvlTitle = document.getElementById('hdr-level-title');
+    const elHdrStreak = document.getElementById('hdr-streak-val');
+    if (elHdrLvlTitle) elHdrLvlTitle.innerText = `${currLvl.icon} Level ${currLvl.level}: ${currLvl.title}`;
+    if (elHdrStreak) elHdrStreak.innerText = `🔥 ${g.streakDays || 1} Gün Seri`;
+
+    // Update Gamification Card
+    const elLvlIcon = document.getElementById('level-badge-icon');
+    const elLvlName = document.getElementById('level-badge-name');
+    const elXpDisplay = document.getElementById('xp-num-display');
+    const elXpFill = document.getElementById('xp-progress-fill');
+    const elNextLvl = document.getElementById('next-level-text');
+    const elStreakDays = document.getElementById('streak-days-count');
+    const elStreakRec = document.getElementById('streak-record-text');
+
+    if (elLvlIcon) elLvlIcon.innerText = currLvl.icon;
+    if (elLvlName) elLvlName.innerText = `Level ${currLvl.level}: ${currLvl.title}`;
+    if (elXpDisplay) elXpDisplay.innerText = `${xp} / ${nextLvl.minXp || currLvl.maxXp} XP`;
+    if (elXpFill) elXpFill.style.width = `${xpPct}%`;
+    if (elNextLvl) {
+      elNextLvl.innerText = currLvl.level === 5 ? '👑 Maksimum Seviyeye Ulaştınız!' : `Bir sonraki seviye: ${nextLvl.icon} ${nextLvl.title} (${nextLvl.minXp} XP)`;
+    }
+    if (elStreakDays) elStreakDays.innerText = `${g.streakDays || 1} Gün Kesintisiz`;
+    if (elStreakRec) elStreakRec.innerText = `En Yüksek Rekor: ${g.maxStreakDays || g.streakDays || 1} Gün`;
+
+    // Render Badges Showcase Grid
+    const badgesGrid = document.getElementById('badges-showcase-grid');
+    if (badgesGrid) {
+      const unlockedSet = new Set(g.unlockedBadgeIds || []);
+      badgesGrid.innerHTML = (this.badgesDataset || []).map(b => {
+        const isUnlocked = unlockedSet.has(b.id);
+        return `
+          <div class="badge-item-card ${isUnlocked ? 'unlocked' : 'locked'}">
+            <div class="badge-icon-box">
+              <i class="fa-solid ${b.icon} ${isUnlocked ? b.iconColor : ''}"></i>
+              ${isUnlocked ? '<span class="badge-check-mark"><i class="fa-solid fa-check"></i></span>' : ''}
+            </div>
+            <div class="badge-info">
+              <strong>${b.title}</strong>
+              <small>${b.desc}</small>
+              <span class="badge-xp-tag">+${b.xpReward} XP</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+  }
+
+  // --- CONFETTI ANIMATION ENGINE ---
+  triggerConfetti() {
+    const canvas = document.getElementById('confetti-canvas');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particles = [];
+    const colors = ['#10B981', '#84CC16', '#06B6D4', '#F59E0B', '#EC4899', '#8B5CF6'];
+
+    for (let i = 0; i < 90; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height * 0.4,
+        r: Math.random() * 6 + 4,
+        dx: (Math.random() - 0.5) * 4,
+        dy: Math.random() * 4 + 2,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        tilt: Math.random() * 10
+      });
+    }
+
+    let frame = 0;
+    function renderConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2, false);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+        p.x += p.dx;
+        p.y += p.dy;
+      });
+
+      frame++;
+      if (frame < 120) {
+        requestAnimationFrame(renderConfetti);
+      } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+    renderConfetti();
   }
 }
 
