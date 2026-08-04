@@ -271,6 +271,60 @@
 
       </div>
 
+      <!-- Smart Surplus & Macro Advisor Card (Akıllı Kalori & Makro Tamamlayıcı) -->
+      <div class="glass-card smart-advisor-card full-width-card mt-4" id="smart-advisor-card">
+        <div class="card-header flex-wrap gap-2">
+          <div>
+            <h3><i class="fa-solid fa-wand-magic-sparkles text-amber fa-bounce"></i> Akıllı Kalori & Makro Tamamlayıcı <span class="badge-pro"><i class="fa-solid fa-bolt"></i> AI Advisor</span></h3>
+            <p class="text-sm text-muted">Günün kalan kalori ve makro besin ihtiyacınızı mideyi yormadan tek tıkla tamamlayacak dinamik algoritma önerileri.</p>
+          </div>
+          
+          <div class="smart-advisor-controls">
+            <select id="smart-advisor-preference" class="custom-select text-sm" onchange="app.renderSmartAdvisor()">
+              <option value="all">🌟 Tüm Öneriler</option>
+              <option value="shake">🥤 Mideyi Yormayan Shake / Sıvı</option>
+              <option value="meal">🍲 Doyurucu Sıcak Öğün</option>
+              <option value="snack">🥜 Pratik Kuruyemiş / Atıştırmalık</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="smart-advisor-summary-bar mt-3">
+          <div class="advisor-status-chip">
+            <i class="fa-solid fa-fire text-amber"></i>
+            <div>
+              <span class="a-label">Kalan Kalori</span>
+              <strong id="adv-rem-cal" class="text-amber">0 kcal</strong>
+            </div>
+          </div>
+          <div class="advisor-status-chip">
+            <i class="fa-solid fa-drumstick-bite text-emerald"></i>
+            <div>
+              <span class="a-label">Kalan Protein</span>
+              <strong id="adv-rem-prot" class="text-emerald">0 g</strong>
+            </div>
+          </div>
+          <div class="advisor-status-chip">
+            <i class="fa-solid fa-bowl-rice text-cyan"></i>
+            <div>
+              <span class="a-label">Kalan Karbonhidrat</span>
+              <strong id="adv-rem-carb" class="text-cyan">0 g</strong>
+            </div>
+          </div>
+          <div class="advisor-status-chip">
+            <i class="fa-solid fa-avocado text-purple"></i>
+            <div>
+              <span class="a-label">Kalan Yağ</span>
+              <strong id="adv-rem-fat" class="text-purple">0 g</strong>
+            </div>
+          </div>
+        </div>
+
+        <div id="smart-advisor-suggestions-grid" class="advisor-suggestions-grid mt-4">
+          <!-- Dynamic Recommendation Cards rendered via app.js -->
+        </div>
+      </div>
+
       <!-- Standalone Water Reminder & Hydration Glass Card -->
       <div class="glass-card water-reminder-card full-width-card mt-4">
         <div class="card-header">

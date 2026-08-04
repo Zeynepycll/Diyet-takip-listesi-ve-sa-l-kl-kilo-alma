@@ -95,6 +95,94 @@ class NutriGainApp {
       }
     ];
 
+    // Smart Surplus Advisor Dataset (Akıllı Kalori & Makro Tamamlayıcı)
+    this.smartSurplusOptions = [
+      {
+        id: 'adv_s1',
+        type: 'shake',
+        title: 'Mega Protein & Fıstık Ezmeli Yulaf Shake',
+        calories: 720,
+        protein: 42,
+        carbs: 78,
+        fat: 26,
+        prepTime: '3 dk',
+        icon: 'fa-blender',
+        badge: 'Sıvı Kalori Şampiyonu',
+        description: 'Mideyi hiç yormadan yüksek kalori ve 42g protein sağlar. Gün bitmeden kalori açığını kapatmak için 1 numaralı tercihtir.',
+        ingredients: ['300ml tam yağlı süt', '60g yulaf', '2 YK fıstık ezmesi', '1 muz']
+      },
+      {
+        id: 'adv_s2',
+        type: 'shake',
+        title: 'Muzlu, Ballı & Çikolatalı Enerji Shake',
+        calories: 540,
+        protein: 22,
+        carbs: 72,
+        fat: 18,
+        prepTime: '2 dk',
+        icon: 'fa-glass-water',
+        badge: 'Hızlı Kalori Takviyesi',
+        description: 'Tatlı ihtiyacını karşılayan, hazmı son derece kolay yüksek karbonhidratlı enerji deposu.',
+        ingredients: ['250ml tam yağlı süt', '2 adet olgun muz', '1 YK bal', '1 YK kakao']
+      },
+      {
+        id: 'adv_s3',
+        type: 'snack',
+        title: 'Karışık Çiğ Kuruyemiş & Kuru Meyve Tabağı',
+        calories: 420,
+        protein: 14,
+        carbs: 35,
+        fat: 26,
+        prepTime: '1 dk',
+        icon: 'fa-cubes-stacked',
+        badge: 'Hacimsiz Yoğun Kalori',
+        description: 'Sağlıklı yağlar ve antioksidanlar bakımından zengin. Midede yer kaplamadan kalori kazandırır.',
+        ingredients: ['30g badem & ceviz', '20g fındık', '3 adet kuru incir / kayısı']
+      },
+      {
+        id: 'adv_s4',
+        type: 'snack',
+        title: 'Fıstık Ezmeli & Muzlu Tam Buğday Tostu',
+        calories: 460,
+        protein: 16,
+        carbs: 58,
+        fat: 18,
+        prepTime: '4 dk',
+        icon: 'fa-bread-slice',
+        badge: 'Pratik Ara Öğün',
+        description: 'Kompleks karbonhidratlar ve sağlıklı yağlar içeren lezzetli enerji deposu.',
+        ingredients: ['2 dilim tam buğday ekmeği', '2 YK doğal fıstık ezmesi', '1 dilimlenmiş muz']
+      },
+      {
+        id: 'adv_s5',
+        type: 'meal',
+        title: 'Süzme Yoğurtlu & Cevizli Kıymalı Makarna',
+        calories: 780,
+        protein: 45,
+        carbs: 85,
+        fat: 28,
+        prepTime: '15 dk',
+        icon: 'fa-bowl-food',
+        badge: 'Yüksek Protein & Karbonhidrat',
+        description: 'Büyük kalori ve protein açığını kapatmak için ideal doyurucu sıcak menü.',
+        ingredients: ['150g tam buğday makarna', '120g yağsız dana kıyma', '3 YK süzme yoğurt + ceviz']
+      },
+      {
+        id: 'adv_s6',
+        type: 'snack',
+        title: 'Süzme Yoğurt, Bal & Çia Tohumlu Kase',
+        calories: 320,
+        protein: 24,
+        carbs: 30,
+        fat: 12,
+        prepTime: '2 dk',
+        icon: 'fa-bowl-rice',
+        badge: 'Gece Kalori Desteği',
+        description: 'Yatmadan önce kas onarımını destekleyen yavaş sindirilen kazein proteini ve sağlıklı kalori kaynağı.',
+        ingredients: ['200g süzme yoğurt', '1 YK bal', '1 YK çia tohumu', '5 adet ceviz içi']
+      }
+    ];
+
     this.currentCategoryFilter = 'all';
     this.currentTagFilter = 'all';
     this.currentSearchTerm = '';
@@ -1147,9 +1235,10 @@ class NutriGainApp {
       }
     }
 
-    // 4. Render Weight Table & Charts
+    // 4. Render Weight Table, Charts & Smart Surplus Advisor
     this.renderWeightHistoryTable();
     this.renderWeightChart();
+    this.renderSmartAdvisor();
   }
 
   renderWeightHistoryTable() {
@@ -1273,6 +1362,119 @@ class NutriGainApp {
         `;
       }).join('')}
     `;
+  }
+
+  // --- SMART SURPLUS ADVISOR (AKILLI KALORİ & MAKRO TAMAMLAYICI) ---
+  renderSmartAdvisor() {
+    const grid = document.getElementById('smart-advisor-suggestions-grid');
+    if (!grid) return;
+
+    const prof = this.state.profile;
+    const meals = this.state.todayLogs.meals || [];
+
+    const consumedCal = meals.reduce((acc, m) => acc + (m.calories || 0), 0);
+    const consumedProt = meals.reduce((acc, m) => acc + (m.protein || 0), 0);
+    const consumedCarb = meals.reduce((acc, m) => acc + (m.carbs || 0), 0);
+    const consumedFat = meals.reduce((acc, m) => acc + (m.fat || 0), 0);
+
+    const targetCal = prof.targetCalories || 2850;
+    const targetProt = prof.proteinTarget || 140;
+    const targetCarb = prof.carbTarget || 360;
+    const targetFat = prof.fatTarget || 95;
+
+    const remCal = Math.max(0, targetCal - consumedCal);
+    const remProt = Math.max(0, targetProt - consumedProt);
+    const remCarb = Math.max(0, targetCarb - consumedCarb);
+    const remFat = Math.max(0, targetFat - consumedFat);
+
+    // Summary Bar updates
+    const elRemCal = document.getElementById('adv-rem-cal');
+    const elRemProt = document.getElementById('adv-rem-prot');
+    const elRemCarb = document.getElementById('adv-rem-carb');
+    const elRemFat = document.getElementById('adv-rem-fat');
+
+    if (elRemCal) elRemCal.innerText = `${remCal.toLocaleString('tr-TR')} kcal`;
+    if (elRemProt) elRemProt.innerText = `${remProt} g`;
+    if (elRemCarb) elRemCarb.innerText = `${remCarb} g`;
+    if (elRemFat) elRemFat.innerText = `${remFat} g`;
+
+    // Goal Reached Congratulation State
+    if (remCal <= 50) {
+      grid.innerHTML = `
+        <div class="advisor-success-box full-width">
+          <div class="success-icon"><i class="fa-solid fa-trophy text-amber fa-bounce"></i></div>
+          <div class="success-info">
+            <h4>Tebrikler! Günlük Kalori & Makro Hedefinizi Başarıyla Tamamladınız! 🎉</h4>
+            <p>Bugün sağlıklı kilo alma yolculuğunuzda hedeflediğiniz tüm enerji ve besin ögelerini eksiksiz aldınız. Kas gelişimi ve vücut dinlenmesi için bol su içmeyi ve kaliteli uyku almayı unutmayın!</p>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    // Filter by User Selection Preference
+    const prefEl = document.getElementById('smart-advisor-preference');
+    const pref = prefEl ? prefEl.value : 'all';
+
+    let candidates = (this.smartSurplusOptions || []).filter(item => {
+      if (pref === 'all') return true;
+      return item.type === pref;
+    });
+
+    // Score & Rank Candidates
+    candidates = candidates.map(item => {
+      const calRatio = Math.min(1.2, item.calories / (remCal || 1));
+      const calFit = Math.max(0, 1 - Math.abs(1 - calRatio));
+      
+      const protRatio = remProt > 0 ? Math.min(1.2, item.protein / remProt) : 1;
+      const protFit = Math.max(0, 1 - Math.abs(1 - protRatio));
+
+      const rawScore = Math.round(((calFit * 0.65) + (protFit * 0.35)) * 100);
+      const matchScore = Math.min(99, Math.max(68, rawScore));
+
+      return { ...item, matchScore };
+    });
+
+    candidates.sort((a, b) => b.matchScore - a.matchScore);
+
+    grid.innerHTML = candidates.map(item => `
+      <div class="advisor-card glass-card-interactive">
+        <div class="adv-card-header">
+          <span class="adv-badge"><i class="fa-solid ${item.icon} text-amber"></i> ${item.badge}</span>
+          <span class="match-score-badge"><i class="fa-solid fa-bolt"></i> %${item.matchScore} Uyum</span>
+        </div>
+
+        <h4 class="adv-title">${item.title}</h4>
+        <p class="adv-desc">${item.description}</p>
+
+        <div class="adv-macros-pills">
+          <span class="macro-pill pill-cal"><i class="fa-solid fa-fire text-amber"></i> ${item.calories} kcal</span>
+          <span class="macro-pill pill-prot"><i class="fa-solid fa-drumstick-bite text-emerald"></i> ${item.protein}g Protein</span>
+          <span class="macro-pill pill-carb"><i class="fa-solid fa-bowl-rice text-cyan"></i> ${item.carbs}g Karb</span>
+          <span class="macro-pill pill-fat"><i class="fa-solid fa-avocado text-purple"></i> ${item.fat}g Yağ</span>
+        </div>
+
+        <div class="adv-ingredients-list">
+          <small class="text-muted d-block mb-1"><i class="fa-solid fa-list-check text-amber"></i> İçindekiler & Hazırlanış (${item.prepTime}):</small>
+          <ul>
+            ${item.ingredients.map(ing => `<li><i class="fa-solid fa-check text-emerald"></i> ${ing}</li>`).join('')}
+          </ul>
+        </div>
+
+        <button class="btn btn-amber btn-block mt-3" onclick="app.addAdvisorOption('${item.id}')">
+          <i class="fa-solid fa-circle-plus"></i> Tek Tıkla Günlüğe Ekle & Tamamla
+        </button>
+      </div>
+    `).join('');
+  }
+
+  addAdvisorOption(optionId) {
+    const item = (this.smartSurplusOptions || []).find(o => o.id === optionId);
+    if (!item) return;
+
+    this.addMeal(item.title, 'Ara Öğün / Shake', item.calories, item.protein, item.carbs, item.fat);
+    this.showToastNotification(`🎯 "${item.title}" (+${item.calories} kcal) günlüğe eklendi!`, 'fa-wand-magic-sparkles');
+    this.renderSmartAdvisor();
   }
 
   // --- SMOOTHIE & SHAKE LAB METHODS ---
