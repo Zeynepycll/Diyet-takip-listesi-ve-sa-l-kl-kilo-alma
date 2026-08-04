@@ -2960,4 +2960,167 @@ body[data-theme="light"] .backup-action-box {
   border-color: hsla(160, 45%, 35%, 0.2);
 }
 
+/* ==========================================================================
+   Smart Grocery & Supply List Styles
+   ========================================================================== */
+.smart-grocery-card {
+  border: 1px solid hsla(160, 84%, 39%, 0.3);
+  background: linear-gradient(135deg, hsla(150, 25%, 11%, 0.92) 0%, hsla(155, 30%, 14%, 0.85) 100%);
+}
+
+.grocery-controls-bar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.grocery-stats-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: hsla(150, 30%, 8%, 0.6);
+  border: 1px solid hsla(160, 84%, 39%, 0.2);
+  border-radius: var(--radius-md);
+}
+
+.g-stat-box {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.g-stat-box i {
+  font-size: 1.5rem;
+}
+
+.g-label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.g-stat-box strong {
+  font-size: 1.05rem;
+  font-family: var(--font-heading);
+}
+
+.g-actions-btns {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.grocery-items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.25rem;
+}
+
+.grocery-category-card {
+  padding: 1.25rem;
+  background: hsla(150, 25%, 12%, 0.8);
+  border: 1px solid hsla(160, 84%, 39%, 0.2);
+  border-radius: var(--radius-md);
+}
+
+.g-cat-title {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  color: var(--accent-amber);
+  border-bottom: 1px solid hsla(160, 84%, 39%, 0.2);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.grocery-checklist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.grocery-check-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.75rem;
+  background: hsla(150, 25%, 9%, 0.6);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.grocery-check-row:hover {
+  background: hsla(150, 25%, 15%, 0.8);
+  border-color: var(--emerald-main);
+}
+
+.grocery-check-row.checked {
+  opacity: 0.6;
+  text-decoration: line-through;
+  background: hsla(150, 20%, 8%, 0.4);
+}
+
+.g-check-left {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.g-check-left input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--emerald-main);
+  cursor: pointer;
+}
+
+.g-item-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.g-check-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.8rem;
+}
+
+.g-item-qty {
+  color: var(--emerald-main);
+  font-weight: 600;
+}
+
+.g-item-price {
+  color: var(--text-muted);
+}
+
+body[data-theme="light"] .smart-grocery-card {
+  background: #FFFFFF;
+  border-color: hsla(160, 45%, 35%, 0.25);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+}
+
+body[data-theme="light"] .grocery-stats-bar {
+  background: #F0F7F3;
+  border-color: hsla(160, 45%, 35%, 0.15);
+}
+
+body[data-theme="light"] .grocery-category-card {
+  background: #FAFCFA;
+  border-color: hsla(160, 45%, 35%, 0.2);
+}
+
+body[data-theme="light"] .grocery-check-row {
+  background: #FFFFFF;
+  border-color: hsla(160, 45%, 35%, 0.12);
+}
+
 

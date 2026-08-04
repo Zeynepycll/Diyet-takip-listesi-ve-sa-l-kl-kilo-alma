@@ -183,6 +183,30 @@ class NutriGainApp {
       }
     ];
 
+    // Smart Grocery Base Dataset (Akıllı Market Alışveriş Veri Seti)
+    this.groceryBaseDataset = [
+      { id: 'g_milk', category: '🥛 Süt & Şarküteri', name: 'Tam Yağlı Süt', baseQty: 0.5, unit: 'Litre', estUnitPriceTL: 38 },
+      { id: 'g_yogurt', category: '🥛 Süt & Şarküteri', name: 'Tam Yağlı Süzme Yoğurt', baseQty: 0.2, unit: 'kg', estUnitPriceTL: 85 },
+      { id: 'g_cheese', category: '🥛 Süt & Şarküteri', name: 'Tam Yağlı Beyaz Peynir', baseQty: 0.08, unit: 'kg', estUnitPriceTL: 180 },
+      
+      { id: 'g_oats', category: '🌾 Tahıl & Kuru Gıda', name: 'İnce Öğütülmüş Yulaf Ezmesi', baseQty: 0.1, unit: 'kg', estUnitPriceTL: 60 },
+      { id: 'g_rice', category: '🌾 Tahıl & Kuru Gıda', name: 'Basmati Pirinç / Şehriye', baseQty: 0.15, unit: 'kg', estUnitPriceTL: 95 },
+      { id: 'g_pasta', category: '🌾 Tahıl & Kuru Gıda', name: 'Tam Buğday Makarna', baseQty: 0.12, unit: 'kg', estUnitPriceTL: 35 },
+      { id: 'g_bread', category: '🌾 Tahıl & Kuru Gıda', name: 'Tam Buğday Ekmeği', baseQty: 0.2, unit: 'Paket', estUnitPriceTL: 30 },
+
+      { id: 'g_peanut_butter', category: '🥜 Kuruyemiş & Ezmeler', name: 'Doğal Fıstık Ezmesi (%100)', baseQty: 0.05, unit: 'kg', estUnitPriceTL: 280 },
+      { id: 'g_nuts', category: '🥜 Kuruyemiş & Ezmeler', name: 'Çiğ Badem & Ceviz İçi', baseQty: 0.04, unit: 'kg', estUnitPriceTL: 420 },
+      { id: 'g_honey', category: '🥜 Kuruyemiş & Ezmeler', name: 'Süzme Çam/Çiçek Balı', baseQty: 0.03, unit: 'kg', estUnitPriceTL: 220 },
+
+      { id: 'g_eggs', category: '🍗 Et & Yumurta', name: 'Organik / Gezen Tavuk Yumurtası', baseQty: 3, unit: 'Adet', estUnitPriceTL: 4.5 },
+      { id: 'g_chicken', category: '🍗 Et & Yumurta', name: 'Taze Tavuk Göğsü (Fileto)', baseQty: 0.2, unit: 'kg', estUnitPriceTL: 195 },
+      { id: 'g_meat', category: '🍗 Et & Yumurta', name: 'Dana Kıyma / Cızbız Köfte', baseQty: 0.15, unit: 'kg', estUnitPriceTL: 440 },
+
+      { id: 'g_bananas', category: '🍌 Meyve & Sebze', name: 'Olgun İthal/Yerli Muz', baseQty: 2, unit: 'Adet', estUnitPriceTL: 8 },
+      { id: 'g_broccoli', category: '🍌 Meyve & Sebze', name: 'Taze Brokoli / Yeşillik', baseQty: 0.1, unit: 'kg', estUnitPriceTL: 50 },
+      { id: 'g_avocado', category: '🍌 Meyve & Sebze', name: 'Yumuşak Avokado', baseQty: 0.5, unit: 'Adet', estUnitPriceTL: 25 }
+    ];
+
     this.currentCategoryFilter = 'all';
     this.currentTagFilter = 'all';
     this.currentSearchTerm = '';
@@ -345,6 +369,7 @@ class NutriGainApp {
     } else if (targetId === 'sec-meal-options') {
       this.renderMealOptions();
       this.updatePackageSummary();
+      this.renderGroceryList();
     } else if (targetId === 'sec-shake-lab') {
       this.renderMissingList();
       this.renderCompanyOrders();
@@ -2238,6 +2263,156 @@ class NutriGainApp {
       });
     } else {
       window.print();
+    }
+  }
+
+  // --- SMART GROCERY LIST & BUDGET PLANNER MODULE ---
+  renderGroceryList() {
+    const grid = document.getElementById('grocery-items-grid');
+    if (!grid) return;
+
+    const daysSelect = document.getElementById('grocery-days-select');
+    const daysMultiplier = parseInt(daysSelect ? daysSelect.value : '7', 10) || 7;
+
+    if (!this.checkedGroceryIds) {
+      this.checkedGroceryIds = new Set(this.state.checkedGroceryIds || []);
+    }
+
+    const categoriesMap = {};
+    let totalEstCostTL = 0;
+    let totalItemsCount = 0;
+
+    (this.groceryBaseDataset || []).forEach(item => {
+      totalItemsCount++;
+      const qty = item.baseQty * daysMultiplier;
+      let qtyStr = '';
+      if (item.unit === 'kg') {
+        qtyStr = qty >= 1 ? `${qty.toFixed(1)} kg` : `${Math.round(qty * 1000)} g`;
+      } else if (item.unit === 'Litre') {
+        qtyStr = qty >= 1 ? `${qty.toFixed(1)} Litre` : `${Math.round(qty * 1000)} ml`;
+      } else {
+        qtyStr = `${Math.round(qty)} ${item.unit}`;
+      }
+
+      const cost = Math.round(qty * item.estUnitPriceTL);
+      totalEstCostTL += cost;
+
+      if (!categoriesMap[item.category]) {
+        categoriesMap[item.category] = [];
+      }
+
+      categoriesMap[item.category].push({
+        ...item,
+        totalQtyStr: qtyStr,
+        costTL: cost,
+        isChecked: this.checkedGroceryIds.has(item.id)
+      });
+    });
+
+    const checkedCount = this.checkedGroceryIds.size;
+    const progressPct = totalItemsCount > 0 ? Math.round((checkedCount / totalItemsCount) * 100) : 0;
+
+    // Update Stats Bar
+    const elCount = document.getElementById('g-total-items-count');
+    const elCost = document.getElementById('g-total-estimated-cost');
+    const elProgress = document.getElementById('g-progress-status');
+
+    if (elCount) elCount.innerText = `${totalItemsCount} Çeşit Ürün`;
+    if (elCost) elCost.innerText = `~${totalEstCostTL.toLocaleString('tr-TR')} TL (${daysMultiplier} Gün)`;
+    if (elProgress) elProgress.innerText = `%${progressPct} Alındı (${checkedCount}/${totalItemsCount})`;
+
+    // Render Categorized Grid
+    grid.innerHTML = Object.keys(categoriesMap).map(catName => {
+      const items = categoriesMap[catName];
+      return `
+        <div class="grocery-category-card glass-card">
+          <h4 class="g-cat-title">${catName}</h4>
+          <ul class="grocery-checklist">
+            ${items.map(item => `
+              <li class="grocery-check-row ${item.isChecked ? 'checked' : ''}" onclick="app.toggleGroceryItem('${item.id}')">
+                <div class="g-check-left">
+                  <input type="checkbox" ${item.isChecked ? 'checked' : ''} onclick="event.stopPropagation(); app.toggleGroceryItem('${item.id}')">
+                  <span class="g-item-name">${item.name}</span>
+                </div>
+                <div class="g-check-right">
+                  <span class="g-item-qty">${item.totalQtyStr}</span>
+                  <span class="g-item-price">~${item.costTL} TL</span>
+                </div>
+              </li>
+            `).join('')}
+          </ul>
+        </div>
+      `;
+    }).join('');
+  }
+
+  toggleGroceryItem(id) {
+    if (!this.checkedGroceryIds) {
+      this.checkedGroceryIds = new Set(this.state.checkedGroceryIds || []);
+    }
+
+    if (this.checkedGroceryIds.has(id)) {
+      this.checkedGroceryIds.delete(id);
+    } else {
+      this.checkedGroceryIds.add(id);
+    }
+
+    this.state.checkedGroceryIds = Array.from(this.checkedGroceryIds);
+    this.saveState();
+    this.renderGroceryList();
+  }
+
+  resetGroceryChecklist() {
+    if (this.checkedGroceryIds) this.checkedGroceryIds.clear();
+    this.state.checkedGroceryIds = [];
+    this.saveState();
+    this.renderGroceryList();
+    this.showToastNotification('🛒 Alışveriş listenizdeki işaretler sıfırlandı.', 'fa-rotate-left');
+  }
+
+  copyGroceryListToWhatsApp() {
+    const daysSelect = document.getElementById('grocery-days-select');
+    const daysMultiplier = parseInt(daysSelect ? daysSelect.value : '7', 10) || 7;
+
+    const categoriesMap = {};
+    let totalEstCostTL = 0;
+
+    (this.groceryBaseDataset || []).forEach(item => {
+      const qty = item.baseQty * daysMultiplier;
+      let qtyStr = '';
+      if (item.unit === 'kg') {
+        qtyStr = qty >= 1 ? `${qty.toFixed(1)} kg` : `${Math.round(qty * 1000)} g`;
+      } else if (item.unit === 'Litre') {
+        qtyStr = qty >= 1 ? `${qty.toFixed(1)} Litre` : `${Math.round(qty * 1000)} ml`;
+      } else {
+        qtyStr = `${Math.round(qty)} ${item.unit}`;
+      }
+
+      const cost = Math.round(qty * item.estUnitPriceTL);
+      totalEstCostTL += cost;
+
+      if (!categoriesMap[item.category]) categoriesMap[item.category] = [];
+      categoriesMap[item.category].push(`[ ] ${qtyStr} ${item.name} (~${cost} TL)`);
+    });
+
+    let msg = `🛒 *CaloFit - Akıllı Market Alışveriş Listesi (${daysMultiplier} Günlük Paket)*\n\n`;
+
+    Object.keys(categoriesMap).forEach(cat => {
+      msg += `*${cat.toUpperCase()}*\n`;
+      msg += categoriesMap[cat].join('\n') + '\n\n';
+    });
+
+    msg += `💰 *Tahmini Toplam Bütçe:* ~${totalEstCostTL.toLocaleString('tr-TR')} TL\n`;
+    msg += `_CaloFit Kişisel Beslenme Portalı_`;
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(msg).then(() => {
+        this.showToastNotification('📋 WhatsApp market listeniz panoya kopyalandı! (Mesaj olarak yapıştırabilirsiniz)', 'fa-brands fa-whatsapp');
+      }).catch(() => {
+        this.showToastNotification('📋 Market listeniz hazırlandı!', 'fa-copy');
+      });
+    } else {
+      this.showToastNotification('📋 Market listeniz hazırlandı!', 'fa-copy');
     }
   }
 }

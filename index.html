@@ -759,9 +759,63 @@
         </div>
       </div>
 
-      <!-- Meal Options Display Grid -->
-      <div class="meal-options-grid" id="meal-cards-container">
-        <!-- Rendered dynamically by JS -->
+      <!-- Smart Grocery & Supply List Generator Card (Akıllı Market Alışveriş Listesi) -->
+      <div class="glass-card smart-grocery-card full-width-card mt-4" id="smart-grocery-card">
+        <div class="card-header flex-wrap gap-2">
+          <div>
+            <h3><i class="fa-solid fa-cart-shopping text-amber fa-bounce"></i> Akıllı Market Alışveriş Listesi & Bütçe Hesabı <span class="badge-pro"><i class="fa-solid fa-bolt"></i> Smart List</span></h3>
+            <p class="text-sm text-muted">Seçtiğiniz beslenme programının tam gramajlı alışveriş listesini, tahmini TL bütçesini çıkarın ve markette kontrol edin.</p>
+          </div>
+
+          <div class="grocery-controls-bar">
+            <div class="duration-selector-wrap">
+              <label for="grocery-days-select" class="text-xs text-muted d-block mb-1"><i class="fa-solid fa-calendar-days text-emerald"></i> Süre Çarpanı:</label>
+              <select id="grocery-days-select" class="custom-select text-sm" onchange="app.renderGroceryList()">
+                <option value="1">1 Günlük İhtiyaç</option>
+                <option value="3">3 Günlük Paket (Mini)</option>
+                <option value="7" selected>1 Haftalık Paket (7 Gün)</option>
+                <option value="14">2 Haftalık Paket (14 Gün)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="grocery-stats-bar mt-3">
+          <div class="g-stat-box">
+            <i class="fa-solid fa-basket-shopping text-emerald"></i>
+            <div>
+              <span class="g-label">Toplam Malzeme</span>
+              <strong id="g-total-items-count">0 Çeşit</strong>
+            </div>
+          </div>
+          <div class="g-stat-box">
+            <i class="fa-solid fa-turkish-lira-sign text-amber"></i>
+            <div>
+              <span class="g-label">Tahmini Market Bütçesi</span>
+              <strong id="g-total-estimated-cost" class="text-amber">0 TL</strong>
+            </div>
+          </div>
+          <div class="g-stat-box">
+            <i class="fa-solid fa-list-check text-cyan"></i>
+            <div>
+              <span class="g-label">Alışveriş İlerlemesi</span>
+              <strong id="g-progress-status" class="text-cyan">%0 Alındı</strong>
+            </div>
+          </div>
+          <div class="g-actions-btns">
+            <button class="btn btn-sm btn-emerald" onclick="app.copyGroceryListToWhatsApp()">
+              <i class="fa-brands fa-whatsapp"></i> WhatsApp Listesi Kopyala
+            </button>
+            <button class="btn btn-sm btn-outline-danger" onclick="app.resetGroceryChecklist()">
+              <i class="fa-solid fa-rotate-left"></i> İşaretleri Sıfırla
+            </button>
+          </div>
+        </div>
+
+        <!-- Categorized Grocery Items Grid -->
+        <div id="grocery-items-grid" class="grocery-items-grid mt-4">
+          <!-- Rendered dynamically by JS -->
+        </div>
       </div>
     </section>
 
