@@ -14,6 +14,9 @@
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
+  <!-- Chart.js Integration -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -1171,9 +1174,10 @@
             </button>
           </div>
 
-          <div class="chart-container">
-            <svg id="weight-chart-svg" class="chart-svg" viewBox="0 0 600 300">
-              <!-- SVG chart elements populated by JS -->
+          <div class="chart-container" style="position: relative; height: 320px; width: 100%;">
+            <canvas id="weight-chart-canvas"></canvas>
+            <svg id="weight-chart-svg" class="chart-svg" viewBox="0 0 600 300" style="display: none;">
+              <!-- SVG chart elements populated by JS fallback -->
             </svg>
           </div>
 

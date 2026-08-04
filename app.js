@@ -1293,16 +1293,137 @@ class NutriGainApp {
     }
   }
 
-  // Render SVG Chart for Weight History
   renderWeightChart() {
-    this.updateGoalForecaster();
+    const canvas = document.getElementById('weight-chart-canvas');
+    const svg = document.getElementById('weight-chart-svg');
+    const data = this.state.weightHistory || [];
 
+    if (!data || data.length === 0) return;
+
+    if (window.Chart && canvas) {
+      if (svg) svg.style.display = 'none';
+      canvas.style.display = 'block';
+
+      const labels = data.map(d => d.date);
+      const weights = data.map(d => d.weight);
+      const arms = data.map(d => d.arm || null);
+      const chests = data.map(d => d.chest || null);
+
+      if (this.weightChartInstance) {
+        this.weightChartInstance.destroy();
+      }
+
+      const isLight = document.body.getAttribute('data-theme') === 'light';
+      const textColor = isLight ? '#0B1911' : '#F4FAF6';
+      const gridColor = isLight ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.08)';
+
+      const ctx = canvas.getContext('2d');
+      const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+      gradient.addColorStop(0, 'rgba(16, 185, 129, 0.45)');
+      gradient.addColorStop(1, 'rgba(16, 185, 129, 0.01)');
+
+      this.weightChartInstance = new Chart(canvas, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Kilo (kg)',
+              data: weights,
+              borderColor: '#10B981',
+              backgroundColor: gradient,
+              borderWidth: 3.5,
+              fill: true,
+              tension: 0.35,
+              pointBackgroundColor: '#84CC16',
+              pointBorderColor: '#09130D',
+              pointBorderWidth: 2,
+              pointRadius: 6,
+              pointHoverRadius: 9
+            },
+            {
+              label: 'Kol Ölçüsü (cm)',
+              data: arms,
+              borderColor: '#84CC16',
+              backgroundColor: 'transparent',
+              borderWidth: 2,
+              borderDash: [5, 5],
+              tension: 0.35,
+              pointRadius: 4,
+              hidden: false
+            },
+            {
+              label: 'Göğüs Ölçüsü (cm)',
+              data: chests,
+              borderColor: '#06B6D4',
+              backgroundColor: 'transparent',
+              borderWidth: 2,
+              borderDash: [3, 3],
+              tension: 0.35,
+              pointRadius: 4,
+              hidden: false
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: {
+            mode: 'index',
+            intersect: false
+          },
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+              labels: {
+                color: textColor,
+                font: { family: 'Plus Jakarta Sans', size: 12, weight: '600' },
+                padding: 15,
+                usePointStyle: true
+              }
+            },
+            tooltip: {
+              backgroundColor: 'rgba(9, 19, 13, 0.92)',
+              titleColor: '#84CC16',
+              bodyColor: '#F4FAF6',
+              borderColor: '#10B981',
+              borderWidth: 1,
+              padding: 12,
+              displayColors: true,
+              callbacks: {
+                label: function(context) {
+                  return ` ${context.dataset.label}: ${context.parsed.y} ${context.dataset.label.includes('Kilo') ? 'kg' : 'cm'}`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { color: gridColor },
+              ticks: { color: textColor, font: { family: 'Plus Jakarta Sans', size: 11 } }
+            },
+            y: {
+              grid: { color: gridColor },
+              ticks: { color: textColor, font: { family: 'Plus Jakarta Sans', size: 11 } }
+            }
+          }
+        }
+      });
+    } else {
+      if (canvas) canvas.style.display = 'none';
+      if (svg) svg.style.display = 'block';
+      this.renderSvgWeightChartFallback();
+    }
+  }
+
+  renderSvgWeightChartFallback() {
     const svg = document.getElementById('weight-chart-svg');
     if (!svg) return;
 
-    const data = this.state.weightHistory;
+    const data = this.state.weightHistory || [];
     if (!data || data.length < 2) {
-      svg.innerHTML = `<text x="300" y="150" fill="#94a3b8" text-anchor="middle">Grafik için en az 2 tartı kaydı gereklidir.</text>`;
+      svg.innerHTML = `<text x="300" y="150" fill="#86E3CE" text-anchor="middle">Grafik için en az 2 tartı kaydı gereklidir.</text>`;
       return;
     }
 
@@ -1317,7 +1438,6 @@ class NutriGainApp {
     const getX = (i) => padding + (i / (data.length - 1)) * (width - 2 * padding);
     const getY = (w) => height - padding - ((w - minW) / (maxW - minW)) * (height - 2 * padding);
 
-    // Build SVG Path
     let pathD = `M ${getX(0)} ${getY(data[0].weight)}`;
     let areaD = `M ${getX(0)} ${height - padding} L ${getX(0)} ${getY(data[0].weight)}`;
 
@@ -1330,14 +1450,7 @@ class NutriGainApp {
 
     areaD += ` L ${getX(data.length - 1)} ${height - padding} Z`;
 
-    // Render SVG Inner Content
     svg.innerHTML = `
-      <!-- Grid lines -->
-      <line x1="${padding}" y1="${padding}" x2="${width - padding}" y2="${padding}" stroke="rgba(255,255,255,0.08)" />
-      <line x1="${padding}" y1="${height / 2}" x2="${width - padding}" y2="${height / 2}" stroke="rgba(255,255,255,0.08)" />
-      <line x1="${padding}" y1="${height - padding}" x2="${width - padding}" y2="${height - padding}" stroke="rgba(255,255,255,0.15)" />
-
-      <!-- Area fill gradient -->
       <defs>
         <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stop-color="#10b981" stop-opacity="0.35" />
@@ -1345,11 +1458,7 @@ class NutriGainApp {
         </linearGradient>
       </defs>
       <path d="${areaD}" fill="url(#chartGrad)" />
-
-      <!-- Line stroke -->
       <path d="${pathD}" fill="none" stroke="#10b981" stroke-width="4" stroke-linecap="round" />
-
-      <!-- Points & Tooltips -->
       ${data.map((d, i) => {
         const cx = getX(i);
         const cy = getY(d.weight);
