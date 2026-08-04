@@ -189,11 +189,11 @@ class NutriGainApp {
         { date: '2026-07-29', weight: 64.0, arm: 33.0, chest: 95.0, waist: 76.0 }
       ],
       gamification: {
-        userXP: 180,
+        userXP: 355,
         streakDays: 3,
         maxStreakDays: 5,
-        unlockedBadgeIds: ['badge_protein'],
-        waterGoalsCompletedCount: 2,
+        unlockedBadgeIds: ['badge_protein', 'badge_water_5'],
+        waterGoalsCompletedCount: 5,
         shakeLabCreatedCount: 1
       }
     };
@@ -2326,10 +2326,29 @@ class NutriGainApp {
       const b = (this.badgesDataset || []).find(item => item.id === badgeId);
       if (b) {
         g.userXP = (g.userXP || 0) + (b.xpReward || 50);
-        this.showToastNotification(`🎖️ YENİ ROZET KAZANILDILAR: "${b.title}"! (+${b.xpReward} XP)`, 'fa-award');
+        this.showToastNotification(`🎖️ YENİ ROZET KAZANILDI: "${b.title}"! (+${b.xpReward} XP)`, 'fa-award');
         this.triggerConfetti();
       }
       this.saveState();
+    }
+  }
+
+  testUnlockNextBadge() {
+    if (!this.state.gamification) {
+      this.state.gamification = { userXP: 355, streakDays: 3, maxStreakDays: 5, unlockedBadgeIds: ['badge_protein', 'badge_water_5'], waterGoalsCompletedCount: 5, shakeLabCreatedCount: 1 };
+    }
+
+    const allBadgeIds = (this.badgesDataset || []).map(b => b.id);
+    const currentUnlocked = this.state.gamification.unlockedBadgeIds || [];
+    const lockedBadges = allBadgeIds.filter(id => !currentUnlocked.includes(id));
+
+    if (lockedBadges.length > 0) {
+      const nextBadgeId = lockedBadges[0];
+      this.unlockBadge(nextBadgeId);
+      this.renderGamification();
+    } else {
+      this.addXP(150, 'Maksimum Rozet Puanı');
+      this.triggerConfetti();
     }
   }
 
